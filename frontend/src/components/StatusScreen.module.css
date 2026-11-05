@@ -1,0 +1,86 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+/* Before the site has loaded: the whole window. */
+.full {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--green-900);
+  color: var(--bg);
+}
+
+/* Inside the layout, between header and footer. */
+.page {
+  min-height: 60vh;
+  color: var(--green-900);
+}
+
+.page .text {
+  color: var(--muted);
+}
+
+.page .detail {
+  color: var(--muted);
+}
+
+.logo {
+  animation: glow 1.6s ease-in-out infinite;
+}
+
+.title {
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.text {
+  max-width: 420px;
+  margin: 0;
+  color: var(--mist);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.detail {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--mist-2);
+}
+
+.button {
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo {
+    animation: none;
+  }
+}

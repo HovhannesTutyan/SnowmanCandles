@@ -1,0 +1,242 @@
+/* Colours from the ingredients design (the same warm palette as the care page). */
+.page {
+  --care-bg: #f8f5ef;
+  --care-ink: #1d2a23;
+  --care-text: #3a3a36;
+  --care-muted: #55524b;
+
+  position: relative;
+  overflow-x: clip;
+  padding-bottom: 120px; /* room for the floating chapter bar */
+  background: var(--care-bg);
+  color: var(--care-text);
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 900px;
+  background: linear-gradient(var(--green-900) 0, var(--green-900) 640px, var(--care-bg) 900px);
+}
+
+.inner {
+  position: relative;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 24px 20px 0;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 32px;
+  padding: clamp(20px, 3vw, 32px);
+  border-radius: 32px;
+  background: #ffffff;
+}
+
+.heroText {
+  flex: 1 1 440px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  padding: clamp(12px, 3vw, 40px);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--green-500);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  margin: 0;
+  color: var(--care-ink);
+  font-family: var(--font-display);
+  font-size: clamp(56px, 7.6vw, 112px);
+  font-weight: 200;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+}
+
+.heroLede {
+  max-width: 460px;
+  margin: 28px 0 0;
+  color: var(--care-muted);
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.heroLink {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  color: var(--green-900);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.heroPicture {
+  position: relative;
+  flex: 1 1 480px;
+  min-width: 0;
+  min-height: 460px;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.heroPhoto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.linen {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, #f4ebdd 0%, #e3d3bc 55%, #c9b193 100%);
+}
+
+.linenShadow {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 12%;
+  height: 6%;
+  border-radius: 50%;
+  background: rgba(90, 60, 30, 0.35);
+  filter: blur(12px);
+}
+
+.linenVessel {
+  position: absolute;
+  left: 50%;
+  bottom: 13%;
+  width: 56%;
+  max-width: 380px;
+  height: auto;
+  filter: drop-shadow(0 20px 22px rgba(90, 60, 30, 0.25));
+  transform: translateX(-50%);
+}
+
+.heroLabel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--care-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Closing call to action */
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: 72px;
+  padding: clamp(40px, 6vw, 88px) clamp(28px, 5vw, 72px);
+  border-radius: 32px;
+  background: var(--green-900);
+  color: var(--care-bg);
+}
+
+.ctaText {
+  flex: 1 1 520px;
+  min-width: 0;
+}
+
+.ctaTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 100px);
+  font-weight: 200;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.ctaLede {
+  max-width: 520px;
+  margin: 24px 0 0;
+  color: var(--mist);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 30px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.ctaButton:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Entrance animation for the hero card */
+.rise {
+  opacity: 0;
+  animation: rise 1s var(--ease-out) 0.15s forwards;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 16px 12px 0;
+  }
+  .hero,
+  .cta {
+    border-radius: 24px;
+  }
+  .heroPicture {
+    min-height: 320px;
+    border-radius: 18px;
+  }
+  .cta {
+    margin-top: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+    opacity: 1;
+  }
+}

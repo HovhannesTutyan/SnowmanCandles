@@ -1,0 +1,412 @@
+/* Styles from product-showcase.css ("glow pedestal" viewer), using the shop's fonts and colours. */
+@property --ps-c {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #8fbf4a;
+}
+
+@property --ps-c2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f3f6ee;
+}
+
+.showcase {
+  --ps-ink: var(--ink);
+  --ps-muted: var(--muted);
+
+  position: relative;
+  width: 100%;
+  height: clamp(480px, 58vw, 680px);
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 32px;
+  background:
+    radial-gradient(60% 55% at 50% 78%, color-mix(in srgb, var(--ps-c) 34%, transparent), transparent 70%),
+    radial-gradient(80% 70% at 15% 10%, color-mix(in srgb, var(--ps-c) 14%, transparent), transparent 65%),
+    var(--ps-c2);
+  color: var(--ps-ink);
+  font-family: var(--font-body);
+  outline: none;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    --ps-c 0.9s ease,
+    --ps-c2 0.9s ease;
+}
+
+.isDragging {
+  cursor: grabbing;
+}
+
+.showcase:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ps-c) 60%, transparent);
+}
+
+/* Soft window-light streaks, like a studio shot. */
+.showcase::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0 9%,
+    rgba(255, 255, 255, 0.55) 9% 13%,
+    transparent 13% 24%
+  );
+  filter: blur(18px);
+  opacity: 0.55;
+  pointer-events: none;
+  transform: translateX(var(--ps-shift, 0));
+  transition: transform 1.2s var(--ease-out);
+}
+
+/* Title with the hint under it, so a long title that wraps can't run into it. */
+.head {
+  position: absolute;
+  top: 6%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.title {
+  font: 600 clamp(20px, 2.4vw, 30px) / 1.2 var(--font-display);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.hint {
+  color: var(--ps-muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: opacity 0.6s;
+}
+
+.hintHidden {
+  opacity: 0;
+}
+
+/* Left: the view's name and caption. */
+.info {
+  position: absolute;
+  top: 30%;
+  left: 4.5%;
+  z-index: 20;
+  max-width: 24%;
+}
+
+.info > div {
+  animation: text-in 0.7s var(--ease-out) both;
+}
+
+.label {
+  margin: 0 0 6px;
+  font: 600 clamp(18px, 1.9vw, 26px) / 1.15 var(--font-display);
+}
+
+.caption {
+  margin: 0;
+  color: var(--ps-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Right: price and position. */
+.meta {
+  position: absolute;
+  top: 30%;
+  right: 4.5%;
+  z-index: 20;
+  text-align: right;
+}
+
+.price {
+  font: 600 clamp(18px, 1.9vw, 26px) / 1.15 var(--font-display);
+}
+
+.count {
+  margin-top: 6px;
+  color: var(--ps-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The glowing pedestal ring. */
+.ring {
+  position: absolute;
+  left: 50%;
+  bottom: 9.5%;
+  z-index: 2;
+  width: min(34%, 400px);
+  aspect-ratio: 5 / 1;
+  border: 2px solid color-mix(in srgb, var(--ps-c) 85%, white);
+  border-radius: 50%;
+  box-shadow:
+    0 0 18px 4px color-mix(in srgb, var(--ps-c) 70%, transparent),
+    inset 0 0 22px 6px color-mix(in srgb, var(--ps-c) 55%, transparent),
+    0 0 90px 30px color-mix(in srgb, var(--ps-c) 35%, transparent);
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation:
+    flash 0.8s var(--ease-out),
+    pulse 3.2s ease-in-out 0.8s infinite;
+}
+
+/* The products. */
+.track {
+  position: absolute;
+  inset: 0;
+}
+
+.item {
+  position: absolute;
+  left: 50%;
+  bottom: 11%;
+  width: min(40%, 470px);
+  aspect-ratio: 6 / 5;
+  transform-origin: 50% 96%;
+  transition:
+    transform 0.85s var(--ease-out),
+    opacity 0.6s ease,
+    filter 0.6s ease;
+  will-change: transform;
+}
+
+.item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 18px rgba(30, 30, 20, 0.16));
+  pointer-events: none;
+  transition: transform 0.5s var(--ease-out);
+  -webkit-user-drag: none;
+}
+
+.isActive {
+  cursor: zoom-in;
+}
+
+/* Motion trail while sliding. */
+.isMoving .item {
+  filter: blur(2.5px);
+}
+
+.isMoving .isActive {
+  filter: blur(1.5px);
+}
+
+/* Zoom. */
+.isZoom {
+  cursor: zoom-out;
+}
+
+.isZoom .item:not(.isActive),
+.isZoom .info,
+.isZoom .meta,
+.isZoom .ring,
+.isZoom .nav {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.isZoom .isActive {
+  cursor: zoom-out;
+}
+
+.isZoom .isActive img {
+  transform: scale(var(--ps-zoom, 2.2));
+  transform-origin: var(--ps-ox, 50%) var(--ps-oy, 50%);
+}
+
+.isZoom.isPanning .isActive img {
+  transition:
+    transform 0.5s var(--ease-out),
+    transform-origin 0.12s linear;
+}
+
+.info,
+.meta,
+.ring,
+.nav {
+  transition: opacity 0.4s ease;
+}
+
+/* Bottom controls. */
+.nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 3.5%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.arrow {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ps-ink);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+.arrow:hover {
+  background: #ffffff;
+  transform: scale(1.06);
+}
+
+.arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pills {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.pill {
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ps-muted);
+  font: 600 12px / 1 var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+.pill:hover {
+  color: var(--ps-ink);
+}
+
+.isOn,
+.isOn:hover {
+  background: var(--green-900);
+  color: #ffffff;
+}
+
+@keyframes text-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.75;
+    transform: translateX(-50%) scale(1.04);
+  }
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.08);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+/* Phones: stacked, with swipe instead of arrows. */
+@media (max-width: 640px) {
+  .showcase {
+    height: clamp(520px, 150vw, 640px);
+    border-radius: 24px;
+  }
+  .head {
+    top: 4.5%;
+    gap: 6px;
+    padding: 0 76px;
+  }
+  .info {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 17%;
+    max-width: none;
+    padding: 0 20px;
+    text-align: center;
+  }
+  .meta {
+    top: 16px;
+    right: 16px;
+  }
+  .price {
+    font-size: 16px;
+  }
+  .item {
+    width: 80%;
+    bottom: 29%;
+  }
+  .ring {
+    width: 66%;
+    bottom: 27.5%;
+  }
+  .pill {
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+  .arrow {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .item img,
+  .info > div {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ring {
+    animation: none;
+  }
+  .isMoving .item {
+    filter: none;
+  }
+}

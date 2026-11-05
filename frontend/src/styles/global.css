@@ -1,0 +1,152 @@
+/* Design tokens taken from the homepage mockup (Main.dc.html). */
+:root {
+  --green-950: #0f261c;
+  --green-900: #183a2c;
+  --green-800: #20473a;
+  --green-700: #24503d;
+  --green-600: #2e6049;
+  --green-500: #2f6b4f;
+  --ink: #1d2a23;
+  --muted: #4f5b54;
+  --line: #dce3dd;
+  --bg: #f3f5f2;
+  --surface: #ffffff;
+  --stone: #ecefea;
+  --gold: #c08a4e;
+  --lime: #c9db9a;
+  --mist: #d5e0d8;
+  --mist-2: #c9d6ce;
+  /* Overridden at runtime with the colour set in the admin. */
+  --accent: #b4451a;
+
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: Figtree, system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: var(--green-900);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Shared motion utilities from the design ------------------------------ */
+
+/* Cards and tiles lift on hover; their image (.pimg) tilts. */
+.lift {
+  transition:
+    transform 0.35s var(--ease-out),
+    box-shadow 0.35s;
+}
+.lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 40px -18px rgba(24, 58, 44, 0.35);
+}
+.lift .pimg {
+  transition: transform 0.5s var(--ease-out);
+}
+.lift:hover .pimg {
+  transform: scale(1.08) rotate(-2deg);
+}
+
+.bob {
+  animation: bob 5s ease-in-out infinite;
+}
+.floaty {
+  animation: bob 6s ease-in-out infinite;
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.pulse {
+  animation: pulse 2.2s ease-out infinite;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 22px rgba(255, 255, 255, 0);
+  }
+}
+
+/* Scroll reveal where the browser supports scroll-driven animation. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+  @keyframes reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(48px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .bob,
+  .floaty,
+  .pulse,
+  .reveal {
+    animation: none !important;
+  }
+}

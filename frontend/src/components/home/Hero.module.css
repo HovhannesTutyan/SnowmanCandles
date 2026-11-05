@@ -1,0 +1,139 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--green-900);
+  color: var(--bg);
+}
+
+.inner {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 24px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+}
+
+.copy {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0 0 20px;
+  color: var(--lime);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6vw, 84px);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.text {
+  max-width: 480px;
+  margin: 24px 0 0;
+  color: var(--mist);
+  font-size: 19px;
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.primary {
+  padding: 0 28px;
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.primary:hover {
+  color: #ffffff;
+  filter: brightness(1.08);
+}
+
+.secondary {
+  padding: 0 24px 0 8px;
+  border: 1.5px solid rgba(243, 245, 242, 0.5);
+  color: var(--bg);
+}
+
+.secondary:hover {
+  color: var(--bg);
+  border-color: var(--bg);
+}
+
+.playDot {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: var(--bg);
+  color: var(--green-900);
+}
+
+.showcaseWrap {
+  display: flex;
+  flex: 1 1 520px;
+  min-width: 0;
+}
+
+/* Entrance animation; each element sets its own animation-delay. */
+.rise {
+  opacity: 0;
+  animation: rise 0.9s var(--ease-out) forwards;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 40px 16px 32px;
+  }
+  .text {
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,321 @@
+/* Colours from the care page design (warmer than the rest of the shop). */
+.page {
+  --care-bg: #f8f5ef;
+  --care-ink: #1d2a23;
+  --care-text: #3a3a36;
+  --care-muted: #55524b;
+  --care-line: #ece6db;
+
+  position: relative;
+  overflow-x: clip;
+  padding-bottom: 120px; /* room for the floating section nav */
+  background: var(--care-bg);
+  color: var(--care-text);
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1440px;
+  background: linear-gradient(var(--green-900) 0, var(--green-900) 1180px, var(--care-bg) 1440px);
+}
+
+.cards {
+  position: relative;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 24px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card {
+  border-radius: 32px;
+  background: #ffffff;
+  scroll-margin-top: 24px;
+}
+
+/* Hero */
+.hero {
+  padding: clamp(28px, 5vw, 64px);
+}
+
+.heroHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px 64px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+
+.heroTitle {
+  flex: 1 1 520px;
+  margin: 0;
+  color: var(--care-ink);
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7.4vw, 104px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  white-space: pre-line; /* line break chosen in the admin */
+}
+
+.heroText {
+  flex: 0 1 400px;
+  margin: 0;
+  color: var(--care-muted);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+/* Shared headings */
+.eyebrow {
+  margin: 0 0 16px;
+  color: var(--green-500);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--care-ink);
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  border-radius: 5px;
+  background: var(--accent);
+}
+
+/* Numbered tips */
+.tipsCard {
+  padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 32px);
+}
+
+.tipsCard .eyebrow {
+  margin-bottom: 32px;
+  padding: 0 clamp(4px, 2vw, 32px);
+}
+
+.tips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tip {
+  padding: 8px 32px;
+}
+
+.tip + .tip {
+  border-left: 1px solid #e4ded3;
+}
+
+.tipNumber {
+  color: var(--green-900);
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.tipTitle {
+  margin: 24px 0 12px;
+  color: var(--care-ink);
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.tipText {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* Care rituals */
+.rituals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px 72px;
+  padding: clamp(28px, 5vw, 64px);
+}
+
+.rituals .sectionTitle {
+  flex: 1 1 380px;
+}
+
+.ritualList {
+  flex: 1 1 460px;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ritual {
+  display: flex;
+  gap: 18px;
+  padding: 20px 0;
+}
+
+.ritual + .ritual {
+  border-top: 1px solid var(--care-line);
+}
+
+.ritualTitle {
+  color: var(--care-ink);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.ritualText {
+  margin-top: 4px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Fragrance split */
+.fragrance {
+  position: relative;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 96px 20px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 48px 72px;
+  scroll-margin-top: 24px;
+}
+
+.fragranceText {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+.lede {
+  margin: 24px 0 32px;
+  color: var(--care-muted);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.point {
+  display: flex;
+  gap: 18px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.point strong {
+  color: var(--care-ink);
+  font-weight: 600;
+}
+
+.productChip {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--care-ink);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.productChip:hover {
+  background: #ffffff;
+  color: var(--accent);
+}
+
+/* Entrance animation for the hero card */
+.rise {
+  opacity: 0;
+  animation: rise 1s var(--ease-out) 0.15s forwards;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .tips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 40px;
+  }
+  .tip:nth-child(3) {
+    border-left: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .backdrop {
+    height: 1100px;
+    background: linear-gradient(var(--green-900) 0, var(--green-900) 860px, var(--care-bg) 1100px);
+  }
+  .cards {
+    padding: 16px 12px 0;
+    gap: 16px;
+  }
+  .card {
+    border-radius: 24px;
+  }
+  .tips {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+  .tip {
+    padding: 28px 4px;
+  }
+  .tip + .tip {
+    border-left: 0;
+    border-top: 1px solid #e4ded3;
+  }
+  .fragrance {
+    padding: 64px 16px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+    opacity: 1;
+  }
+}

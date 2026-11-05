@@ -1,0 +1,338 @@
+.section {
+  padding: 104px 24px;
+  background: var(--surface);
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.intro {
+  max-width: 720px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--green-500);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.4vw, 56px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.text {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.careLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 32px;
+}
+
+/* Animated plaster-to-painted transformation */
+.paintBox {
+  display: flex;
+  flex: 1 1 420px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 40px;
+  border-radius: 32px;
+  background: var(--stone);
+}
+
+.paintStage {
+  position: relative;
+  width: min(100%, 420px);
+  aspect-ratio: 0.9 / 1;
+}
+
+.paintImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 20px rgba(24, 58, 44, 0.18));
+}
+
+.painted {
+  animation: paint 10s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
+}
+
+.brush {
+  position: absolute;
+  top: 30%;
+  width: 0;
+  height: 0;
+  animation: brush 10s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
+}
+
+.brush svg {
+  position: absolute;
+  left: -12px;
+  top: -52px;
+}
+
+/* Steps + video */
+.side {
+  display: flex;
+  flex: 1 1 420px;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 20px 22px;
+  border: 1.5px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+}
+
+/* Each step lights up while its part of the paint animation plays. */
+.step1 {
+  animation: s1 10s linear infinite;
+}
+.step2 {
+  animation: s2 10s linear infinite;
+}
+.step3 {
+  animation: s3 10s linear infinite;
+}
+
+.stepNumber {
+  flex: none;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stepTitle {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.stepText {
+  margin-top: 4px;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.78;
+}
+
+.video {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--green-900);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+a.video:hover {
+  color: var(--bg);
+}
+
+.videoImage {
+  position: absolute;
+  right: -6%;
+  bottom: -14%;
+  width: 58%;
+  height: auto;
+  opacity: 0.9;
+}
+
+.videoText {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  right: 46%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.videoPlay {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 28px;
+  background: var(--bg);
+  color: var(--green-900);
+}
+
+.videoTitle {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.videoCaption {
+  color: var(--mist-2);
+  font-size: 14px;
+}
+
+@keyframes paint {
+  0%,
+  16% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 1;
+  }
+  72%,
+  94% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 0;
+  }
+}
+
+@keyframes brush {
+  0%,
+  14% {
+    left: 0%;
+    opacity: 0;
+  }
+  17% {
+    left: 0%;
+    opacity: 1;
+  }
+  70% {
+    left: 100%;
+    opacity: 1;
+  }
+  74%,
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes s1 {
+  0%,
+  15% {
+    background: var(--green-900);
+    color: #ffffff;
+    border-color: var(--green-900);
+  }
+  17%,
+  100% {
+    background: #ffffff;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+}
+
+@keyframes s2 {
+  0%,
+  15% {
+    background: #ffffff;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  17%,
+  72% {
+    background: var(--green-900);
+    color: #ffffff;
+    border-color: var(--green-900);
+  }
+  74%,
+  100% {
+    background: #ffffff;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+}
+
+@keyframes s3 {
+  0%,
+  72% {
+    background: #ffffff;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  74%,
+  98% {
+    background: var(--green-900);
+    color: #ffffff;
+    border-color: var(--green-900);
+  }
+  100% {
+    background: #ffffff;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 72px 16px;
+  }
+  .paintBox {
+    padding: 24px;
+  }
+  .videoText {
+    right: 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .painted {
+    animation: none;
+    clip-path: none;
+  }
+  .brush,
+  .step1,
+  .step2,
+  .step3 {
+    animation: none;
+  }
+}

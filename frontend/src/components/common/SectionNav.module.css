@@ -1,0 +1,97 @@
+.nav {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 20;
+  width: calc(100% - 32px);
+  max-width: 760px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 8px 8px 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.28);
+  transform: translateX(-50%);
+}
+
+.title {
+  color: var(--care-ink);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-left: auto;
+  overflow-x: auto;
+  font-size: 15px;
+  font-weight: 500;
+  scrollbar-width: none;
+}
+
+.links::-webkit-scrollbar {
+  display: none;
+}
+
+.divider {
+  flex: none;
+  width: 1px;
+  height: 18px;
+  background: #e4ded3;
+}
+
+.link {
+  flex: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: var(--care-text);
+  text-decoration: none;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.link:hover {
+  color: var(--accent);
+}
+
+.active,
+.active:hover {
+  background: var(--green-900);
+  color: #ffffff;
+}
+
+/* The pill next to the active link replaces its divider visually. */
+.active + .divider,
+.divider:has(+ .active) {
+  opacity: 0;
+}
+
+@media (max-width: 700px) {
+  .title {
+    display: none;
+  }
+  .nav {
+    padding-left: 8px;
+  }
+  .links {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .link {
+    padding: 0 10px;
+  }
+}

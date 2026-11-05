@@ -1,0 +1,17 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.button:hover {
+  color: #ffffff;
+  filter: brightness(1.08);
+}

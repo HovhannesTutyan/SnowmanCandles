@@ -1,0 +1,35 @@
+.ticker {
+  overflow: hidden;
+  padding: 10px 0;
+  background: var(--green-950);
+  color: #e6edda;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: slide 38s linear infinite;
+}
+
+.message {
+  padding: 0 28px;
+}
+
+.star {
+  color: var(--gold);
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

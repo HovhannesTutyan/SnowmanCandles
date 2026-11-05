@@ -1,0 +1,175 @@
+.art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+}
+
+/* Soy */
+.soy {
+  background: radial-gradient(ellipse at 72% 85%, #fff8ea 0%, #f3e6cd 40%, #e2cda8 100%);
+}
+
+.soyPool {
+  position: absolute;
+  left: 50%;
+  bottom: -40%;
+  width: 120%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 30%, #fffdf6 0%, #f8eedc 50%, rgba(248, 238, 220, 0) 72%);
+  transform: translateX(-50%);
+}
+
+.soyShine {
+  position: absolute;
+  right: 12%;
+  bottom: 18%;
+  width: 30%;
+  height: 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 70%);
+}
+
+.flake {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Plaster */
+.plaster {
+  background: linear-gradient(120deg, #f1eee8 0%, #e2dcd2 55%, #cfc6b8 100%);
+}
+
+.pore {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(120, 110, 95, 0.35);
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.vessel {
+  position: absolute;
+  left: 44%;
+  bottom: -16%;
+  width: 26%;
+  max-width: 340px;
+  height: auto;
+  filter: drop-shadow(0 20px 22px rgba(60, 50, 40, 0.25));
+}
+
+/* Wick */
+.wick {
+  background: radial-gradient(ellipse at 62% 55%, #6a3a18 0%, #3a2010 30%, #1e1610 65%);
+}
+
+.wickGlow {
+  position: absolute;
+  left: 62%;
+  top: 22%;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 190, 100, 0.45), rgba(255, 150, 60, 0) 65%);
+  transform: translateX(-50%);
+  animation: warm 3.2s ease-in-out infinite;
+}
+
+.candle {
+  position: absolute;
+  left: 50%;
+  right: 26%;
+  bottom: 0;
+  height: 30%;
+  border-radius: 40px 40px 0 0;
+  background: linear-gradient(#f3e8d4, #dccbae);
+}
+
+/* The wick: a 44px stem whose top carries the flame. */
+.wickStem {
+  position: absolute;
+  left: 62%;
+  bottom: 30%;
+  width: 40px;
+  height: 44px;
+  margin-left: -20px;
+}
+
+.wickStem::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 4px;
+  height: 100%;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: linear-gradient(#2a1a10, #6b5a48);
+}
+
+.wisp {
+  position: absolute;
+  left: 62%;
+  top: 18%;
+  width: 2px;
+  height: 60px;
+  border-radius: 2px;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+  animation: wisp 6s ease-in-out infinite;
+}
+
+/* Fragrance */
+.fragrance {
+  background: linear-gradient(135deg, #6b7658 0%, #4e5a43 55%, #3b4533 100%);
+}
+
+.sprigs {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+/* Colour */
+.colour {
+  display: grid;
+}
+
+@keyframes warm {
+  0%,
+  100% {
+    opacity: 0.95;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) scale(0.92);
+  }
+}
+
+@keyframes wisp {
+  0% {
+    transform: translateY(20px) scaleY(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120px) scaleY(1.2) translateX(14px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wickGlow,
+  .wisp {
+    animation: none;
+  }
+}

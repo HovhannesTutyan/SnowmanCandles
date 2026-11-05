@@ -1,0 +1,73 @@
+.train {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 0 32px;
+  border-top: 1px solid var(--green-700);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: slide 60s linear infinite;
+}
+
+.track:hover,
+.track:focus-within {
+  animation-play-state: paused;
+}
+
+.chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-right: 18px;
+  padding: 10px 22px 10px 10px;
+  border-radius: 999px;
+  background: var(--green-800);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+.chip:hover {
+  color: var(--lime);
+}
+
+.chipImage {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 32px;
+  background: var(--green-600);
+}
+
+.chipImage img {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.chipName {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .train {
+    overflow-x: auto;
+  }
+  .track {
+    animation: none;
+  }
+}

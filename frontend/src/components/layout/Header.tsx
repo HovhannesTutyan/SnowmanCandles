@@ -1,0 +1,101 @@
+import { useEffect, useId, useState } from 'react'
+import { Link, useLocation } from 'react-router'
+
+import { useCart } from '../../context/cart'
+import { BagIcon, CloseIcon, LogoIcon, MenuIcon, SearchIcon } from '../icons'
+import styles from './Header.module.css'
+
+// Homepage sections work from every page; the footer is on every page.
+const NAV_LINKS = [
+  { to: '/#winter', label: 'Shop' },
+  { to: '/#made', label: "How it's made" },
+  { to: '/decorate', label: 'Inspiration' },
+  { to: '/ingredients', label: 'Ingredients' },
+  { to: '/candle-care', label: 'Candle care' },
+  { to: '/#custom', label: 'Custom orders' },
+  { to: '#footer', label: 'Contact' },
+]
+
+interface HeaderProps {
+  studioName: string
+}
+
+export function Header({ studioName }: HeaderProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const navId = useId()
+  const { count } = useCart()
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [menuOpen])
+
+  return (
+    <header className={styles.header}>
+      <div className={styles.inner}>
+        <Link to="/" className={styles.logo}>
+          <LogoIcon />
+          <span className={styles.logoText}>{studioName}</span>
+        </Link>
+
+        <nav
+          id={navId}
+          aria-label="Main"
+          className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}
+        >
+          {NAV_LINKS.map((link) =>
+            link.to.startsWith('#') ? (
+              <a key={link.to} href={link.to} onClick={() => setMenuOpen(false)}>
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMenuOpen(false)}
+                aria-current={link.to === pathname ? 'page' : undefined}
+              >
+                {link.label}
+              </Link>
+            ),
+          )}
+        </nav>
+
+        <div className={styles.actions}>
+          {/* Search is visual only; the cart counts items but has no page yet. */}
+          <button type="button" className={styles.iconButton} aria-label="Search">
+            <SearchIcon />
+          </button>
+          <button
+            type="button"
+            className={styles.iconButton}
+            aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}
+          >
+            <BagIcon />
+            {count > 0 && (
+              // Keyed by count so the bump animation replays on every add.
+              <span key={count} className={styles.badge} aria-hidden="true">
+                {count > 99 ? '99+' : count}
+              </span>
+            )}
+          </button>
+          <button
+            type="button"
+            className={`${styles.iconButton} ${styles.menuButton}`}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            aria-controls={navId}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
+      </div>
+    </header>
+  )
+}
