@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "care",
     "ingredients",
     "decorate",
+    "orders",
 ]
 
 MIDDLEWARE = [
@@ -73,7 +74,8 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # Project-wide admin templates (the admin home page).
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -169,6 +171,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 12,
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    # Placing orders is limited per visitor, against spam.
+    "DEFAULT_THROTTLE_RATES": {"orders": "20/hour"},
 }
 
 

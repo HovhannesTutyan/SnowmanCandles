@@ -223,11 +223,11 @@ class HomePageContent(models.Model):
     price_note = models.CharField(
         max_length=120,
         blank=True,
-        default="Tax included. Shipping calculated at checkout.",
+        default="Tax included. Free delivery in 1–2 days.",
         help_text="Small note next to the price.",
     )
     ships_in = models.CharField(
-        max_length=40, blank=True, default="3–5 days", help_text='e.g. "3–5 days"'
+        max_length=40, blank=True, default="1–2 days", help_text='e.g. "1–2 days"'
     )
     care_text = models.TextField(
         "candle care",
@@ -240,11 +240,26 @@ class HomePageContent(models.Model):
     shipping_text = models.TextField(
         "shipping & returns",
         default=(
-            "Every piece is wrapped by hand and sent with tracking. As each candle is made by "
-            "hand, please get in touch within 14 days if anything arrives damaged and we'll "
-            "make it right."
+            "Delivery is free and takes 1–2 days. Every piece is wrapped by hand, and as each "
+            "candle is made by hand, please get in touch within 14 days if anything arrives "
+            "damaged and we'll make it right."
         ),
     )
+    # Basket & checkout
+    delivery_text = models.CharField(
+        max_length=120,
+        default="Free delivery in 1–2 days",
+        help_text="Shown in the basket and at checkout.",
+    )
+    order_success_text = models.TextField(
+        "thank-you message",
+        default=(
+            "Thank you! We've received your order and will call you soon to confirm the "
+            "details. Delivery is free and takes 1–2 days."
+        ),
+        help_text="Shown after a customer places an order.",
+    )
+
     story_title = models.CharField(
         "making-of title",
         max_length=160,

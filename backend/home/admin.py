@@ -61,6 +61,7 @@ class HomePageContentAdmin(TranslatedAdmin):
         ("Footer & contact", {"fields": [
             "footer_text", "contact_email", "contact_phone", "instagram_handle",
         ]}),
+        ("Basket & checkout", {"fields": ["delivery_text", "order_success_text"]}),
         ("Product pages", {
             "fields": ["price_note", "ships_in", "care_text", "shipping_text",
                        "story_title", "story_text"],

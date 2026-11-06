@@ -104,7 +104,7 @@ describe('ProductPage', () => {
     expect(screen.queryByRole('group', { name: 'Product views' })).not.toBeInTheDocument()
   })
 
-  it('adds the chosen scent and quantity to the cart', async () => {
+  it('adds the chosen scent and quantity to the basket', async () => {
     mockApi({ '/api/site/': makeContent(), [ROADSTER_PATH]: makeCandleDetail({ stock: 3 }) })
     renderApp('/candles/vintage-roadster-candle')
     await screen.findByRole('heading', { level: 1 })
@@ -119,9 +119,9 @@ describe('ProductPage', () => {
     expect(increase).toBeDisabled() // capped at the stock
     expect(screen.getByLabelText('Quantity 3')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Add to cart' }))
-    expect(screen.getByRole('button', { name: 'Cart, 3 items' })).toBeInTheDocument()
-    expect(screen.getByText('Added to cart')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Add to basket' }))
+    expect(screen.getByRole('button', { name: 'Basket, 3 items' })).toBeInTheDocument()
+    expect(screen.getByText('Added to basket')).toBeInTheDocument()
 
     const stored = JSON.parse(localStorage.getItem('candle-shop:cart') ?? '[]')
     expect(stored).toEqual([{ key: 'candle-vintage-roadster-candle', scent: 'Pine & cedar', quantity: 3 }])

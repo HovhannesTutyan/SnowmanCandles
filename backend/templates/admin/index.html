@@ -1,0 +1,3 @@
+{% extends "admin/index.html" %}
+{% load languages_admin orders_admin %}
+{% block content %}{% orders_panel %}{% languages_panel %}{{ block.super }}{% endblock %}

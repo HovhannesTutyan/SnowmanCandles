@@ -26,3 +26,11 @@ export function itemPath(item: Pick<ShopItem, 'product_type' | 'slug'>): string 
 export function slideLinkPath(link: SlideLink): string {
   return productPath(link.type, link.slug)
 }
+
+/** The reverse of itemKey: "candle-vintage-roadster-candle" -> candle + slug. */
+export function parseItemKey(key: string): { kind: ProductKind; slug: string } | null {
+  for (const kind of ['collection', 'candle'] as const) {
+    if (key.startsWith(`${kind}-`)) return { kind, slug: key.slice(kind.length + 1) }
+  }
+  return null
+}

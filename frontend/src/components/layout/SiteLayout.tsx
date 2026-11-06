@@ -5,6 +5,7 @@ import { fetchSite } from '../../api/client'
 import { SiteProvider } from '../../context/SiteProvider'
 import { useI18n } from '../../i18n/context'
 import { useAsync } from '../../hooks/useAsync'
+import { CartPanel } from '../cart/CartPanel'
 import { ErrorScreen, LoadingScreen } from '../StatusScreen'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -32,6 +33,7 @@ export function SiteLayout() {
         </main>
         <Footer content={content} />
       </div>
+      <CartPanel />
       <ScrollRestoration />
     </SiteProvider>
   )

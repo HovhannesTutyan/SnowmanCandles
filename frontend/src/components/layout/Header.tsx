@@ -26,7 +26,7 @@ interface HeaderProps {
 export function Header({ studioName }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const navId = useId()
-  const { count } = useCart()
+  const { count, openPanel } = useCart()
   const { pathname } = useLocation()
   const { t, path } = useI18n()
 
@@ -72,7 +72,7 @@ export function Header({ studioName }: HeaderProps) {
 
         <div className={styles.actions}>
           <LanguageSwitcher />
-          {/* Search is visual only; the cart counts items but has no page yet. */}
+          {/* Search is visual only for now. The bag opens the basket panel. */}
           <button type="button" className={styles.iconButton} aria-label={t.header.search}>
             <SearchIcon />
           </button>
@@ -80,6 +80,8 @@ export function Header({ studioName }: HeaderProps) {
             type="button"
             className={styles.iconButton}
             aria-label={t.header.cart(count)}
+            aria-haspopup="dialog"
+            onClick={openPanel}
           >
             <BagIcon />
             {count > 0 && (

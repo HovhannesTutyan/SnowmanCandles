@@ -96,6 +96,9 @@ export interface SiteContent {
   // Shared by every product page
   price_note: string
   ships_in: string
+  /** Basket & checkout (Site content). */
+  delivery_text: string
+  order_success_text: string
   care_text: string
   shipping_text: string
   story_title: string
@@ -275,4 +278,47 @@ export interface DecoratePageData {
   cta_image: string | null
   rooms: DecorateRoom[]
   gallery: GalleryPicture[]
+}
+
+/** One basket line's current details from POST /api/cart/ (null: no longer sold). */
+export interface CartQuoteLine {
+  kind: ProductKind
+  slug: string
+  title: string
+  image: string | null
+  tint: string
+  product_type: ProductType
+  /** Price of one, decimal string. */
+  price: string
+  /** The scent in the page's language ("" when none). */
+  scent: string
+  stock: number
+}
+
+export interface CartQuote {
+  lines: (CartQuoteLine | null)[]
+}
+
+export interface OrderRequest {
+  items: { kind: ProductKind; slug: string; scent: string; quantity: number }[]
+  full_name: string
+  phone: string
+  email: string
+  city: string
+  address: string
+  notes: string
+  language: string
+  /** Hidden from people; must stay empty. */
+  website: string
+}
+
+export interface PlacedOrder {
+  number: string
+  total: string
+}
+
+/** 409 from POST /api/orders/: lines (by index) with too few in stock. */
+export interface OutOfStockProblem {
+  index: number
+  available: number
 }

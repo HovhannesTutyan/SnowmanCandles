@@ -27,4 +27,5 @@ class HomePageContentTranslation(ShopTranslationOptions):
         "newsletter_title", "newsletter_text",
         "footer_text",
         "price_note", "ships_in", "care_text", "shipping_text", "story_title", "story_text",
+        "delivery_text", "order_success_text",
     )

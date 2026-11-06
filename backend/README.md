@@ -280,6 +280,21 @@ footer and the homepage's "Shop by type" section. Every section is editable:
 Without uploads, the hero and closing pictures fall back to the design's. The 16 gallery
 pictures from the design are demo content loaded by `python manage.py seed_demo`.
 
+## Orders (Orders → Orders)
+
+Customers fill in the checkout form (name, phone, optional email, city, address, note) and
+the order appears here with status **New**. There is no online payment and delivery is free
+(1–2 days): call the customer to confirm, then move the order along with the **Status** field
+or the list actions (*confirmed*, *out for delivery*, *delivered*).
+
+- Placing an order takes its items out of stock. **Cancelling** (status or the list action)
+  puts them back; a cancelled order can't be reopened.
+- Prices, stock and totals are always worked out on the server, never trusted from the browser.
+- The admin home page shows how many new orders are waiting.
+- The basket texts ("Free delivery in 1–2 days", the thank-you message) are under
+  **Home → Site content → Basket & checkout**.
+- Spam protection: a hidden form field, and at most 20 orders per visitor per hour.
+
 ## Languages (English, Armenian, Russian)
 
 The site is in **Armenian** (the default, at `/`), **English** (`/en/…`) and **Russian**
@@ -326,7 +341,7 @@ fields come back in that language, falling back to English when a translation is
 
 ## API
 
-All endpoints are read-only (`GET`). Add `?lang=hy|en|ru` for a language
+All endpoints are read-only (`GET`), except the two basket/order `POST`s. Add `?lang=hy|en|ru` for a language
 (see [Languages](#languages-english-armenian-russian)).
 
 | Endpoint                         | Description                                          |
@@ -340,6 +355,8 @@ All endpoints are read-only (`GET`). Add `?lang=hy|en|ru` for a language
 | `/api/care/`                     | The candle care page: texts, photos, tips, rituals, fragrance points, FAQs |
 | `/api/ingredients/`              | The ingredients page: hero, closing texts and published chapters |
 | `/api/decorate/`                 | The decorate page: texts, rooms (with `gallery_index`), published gallery pictures |
+| `POST /api/cart/`                | Basket details: `{"items": [{"kind", "slug", "scent", "quantity"}]}` -> current title, image, price and stock per line (`null` if no longer sold) |
+| `POST /api/orders/`              | Place an order: the basket items plus `full_name`, `phone`, `email`, `city`, `address`, `notes`, `language`. 201 `{number, total}`; 409 when stock ran out |
 
 The detail endpoints add the product page fields to the list item shape:
 

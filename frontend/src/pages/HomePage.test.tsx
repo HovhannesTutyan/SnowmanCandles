@@ -56,13 +56,13 @@ describe('HomePage', () => {
     )
   })
 
-  it('counts "Add to cart" in the header badge', async () => {
+  it('counts "Add to basket" in the header badge', async () => {
     mockApi({ '/api/site/': makeContent(), '/api/home/': makeHomeData() })
     renderApp('/')
 
     const grid = await screen.findByRole('region', { name: /Painted for the season/ })
-    fireEvent.click(within(grid).getByRole('button', { name: 'Add to cart: Holly Bauble Candle' }))
-    expect(screen.getByRole('button', { name: 'Cart, 1 item' })).toBeInTheDocument()
+    fireEvent.click(within(grid).getByRole('button', { name: 'Add to basket: Holly Bauble Candle' }))
+    expect(screen.getByRole('button', { name: 'Basket, 1 item' })).toBeInTheDocument()
     expect(within(grid).getByRole('button', { name: /Added ✓/ })).toBeInTheDocument()
   })
 

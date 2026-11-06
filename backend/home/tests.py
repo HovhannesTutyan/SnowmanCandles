@@ -158,7 +158,9 @@ class HomePageContentTests(MediaTestMixin, APITestCase):
 
     def test_site_endpoint_includes_product_page_texts(self):
         data = self.client.get(reverse("site")).data
-        self.assertEqual(data["ships_in"], "3–5 days")
+        self.assertEqual(data["ships_in"], "1–2 days")
+        self.assertEqual(data["delivery_text"], "Free delivery in 1–2 days")
+        self.assertIn("Thank you", data["order_success_text"])
         self.assertIn("Trim the wick", data["care_text"])
         self.assertTrue(data["shipping_text"])
         self.assertEqual(data["story_title"], "Hours of small brushstrokes in every one.")

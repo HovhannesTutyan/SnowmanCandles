@@ -1,0 +1,13 @@
+<section class="lang-panel orders-panel" aria-labelledby="orders-panel-title">
+  <div class="lang-panel-head">
+    <h2 id="orders-panel-title">Orders</h2>
+    <a href="{{ all_url }}">All orders →</a>
+  </div>
+  <ul class="lang-panel-counts">
+    <li class="{% if new %}is-missing{% else %}is-done{% endif %}">
+      {% if new %}<a href="{{ new_url }}"><strong>{{ new }} new order{{ new|pluralize }}</strong></a> waiting to be confirmed{% else %}No new orders{% endif %}
+    </li>
+    {% if in_progress %}<li><strong>{{ in_progress }}</strong> confirmed or out for delivery</li>{% endif %}
+  </ul>
+  <p class="lang-panel-note">Customers don't pay on the site: call them to confirm, then update the status. Delivery is free (1–2 days).</p>
+</section>

@@ -69,6 +69,8 @@ export function makeContent(overrides: Partial<SiteContent> = {}): SiteContent {
     instagram_handle: '',
     price_note: 'Tax included.',
     ships_in: '3–5 days',
+    delivery_text: 'Free delivery in 1–2 days',
+    order_success_text: 'Thank you! We will call you soon.',
     care_text: 'Trim the wick before lighting.',
     shipping_text: 'Wrapped by hand and sent with tracking.',
     story_title: 'Hours of small brushstrokes in every one.',

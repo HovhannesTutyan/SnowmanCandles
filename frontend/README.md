@@ -61,7 +61,7 @@ src/
   i18n/           Languages: locales.ts (prefixes, names), messages/en|hy|ru.ts (interface
                   texts), context.ts (useI18n), LocaleRoot, Link (keeps the language)
   api/            Typed API client (client.ts) and response types (types.ts)
-  context/        Site content (useSite) and cart (useCart) contexts + providers
+  context/        Site content (useSite) and basket (useCart: lines, quantities, slide-in panel)
   hooks/          useAsync (loading / error / retry), useFlash, useMediaQuery, usePrefersReducedMotion
   lib/            Price formatting, product URLs/keys, design image fallbacks, helpers
   components/
@@ -75,8 +75,9 @@ src/
     ingredients/  ChapterSection, Illustrations (drawn banners), Disclosure, CardIcon
     decorate/     GallerySlider (drag/swipe/keys), Lightbox (full-screen viewer)
     common/       SectionNav (sticky section bar), RichText (**bold** in admin text)
+    cart/         CartPanel (slide-in basket), CartLineItem (row with quantity buttons), CartTotals
     StatusScreen  Loading, error and message screens
-  pages/          HomePage, ProductPage, CareTipsPage, IngredientsPage, DecoratePage,
+  pages/          HomePage, ProductPage, CareTipsPage, IngredientsPage, DecoratePage, BasketPage, CheckoutPage,
                   NotFoundPage, RouteErrorPage
   styles/         global.css: design tokens and shared animation utilities
   assets/design/  Images from the original design (used as fallbacks)
@@ -122,8 +123,11 @@ the current page in another language.
 
 - Animations follow the design and switch off for visitors with *reduce motion* enabled.
   The carousel then stays on one slide, and the bars under it can still be clicked.
-- "Add to cart" counts items in the header badge and remembers them in the browser
-  (`localStorage`), with the chosen scent and quantity. There is no cart page or checkout yet.
+- **Basket and checkout:** "Add to basket" opens a slide-in basket (also from the bag icon), with
+  quantity buttons, remove, and links to `/basket` and `/checkout`. The basket is kept in the
+  browser (`localStorage`); prices and stock are fetched from `POST /api/cart/` and checked again
+  when the order is placed (`POST /api/orders/`). No online payment: orders go to the admin and
+  the shop calls the customer. Delivery is free (1–2 days).
 - Search, the newsletter form and "Request a custom piece" are visual only for now.
   The shop-by-type tiles and "View all pieces" scroll within the homepage until shop pages exist.
 - Deploying: product URLs like `/candles/<slug>` are handled in the browser, so the web server
