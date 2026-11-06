@@ -1,22 +1,24 @@
-import { Link } from 'react-router'
 
 import type { ShopItem } from '../../api/types'
 import { useSite } from '../../context/site'
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
 import { itemKey, itemPath } from '../../lib/items'
 import { ArrowRightIcon } from '../icons'
 import styles from './RelatedProducts.module.css'
 
 export function RelatedProducts({ items }: { items: ShopItem[] }) {
   const { formatPrice } = useSite()
+  const { t } = useI18n()
   if (items.length === 0) return null
 
   return (
     <section className={styles.related} aria-labelledby="related-title">
       <div className={styles.inner}>
         <div className={`${styles.head} reveal`}>
-          <h2 id="related-title" className={styles.title}>You might also love</h2>
+          <h2 id="related-title" className={styles.title}>{t.product.related}</h2>
           <Link to="/#winter" className={styles.back}>
-            Back to the collection
+            {t.product.backToCollection}
             <ArrowRightIcon />
           </Link>
         </div>
@@ -30,7 +32,7 @@ export function RelatedProducts({ items }: { items: ShopItem[] }) {
                 <div className={styles.cardBody}>
                   <div className={styles.cardTitle}>{item.title}</div>
                   <div className={styles.cardMeta}>
-                    {item.product_type_label} · {formatPrice(item.price)}
+                    {t.productType[item.product_type]} · {formatPrice(item.price)}
                   </div>
                 </div>
               </Link>

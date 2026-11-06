@@ -1,6 +1,7 @@
-import { Link } from 'react-router'
 
 import type { ShopItem } from '../../api/types'
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
 import { itemKey, itemPath } from '../../lib/items'
 import { repeatToLength } from '../../lib/repeat'
 import styles from './ProductTrain.module.css'
@@ -11,13 +12,14 @@ interface ProductTrainProps {
 
 /** The endless row of product chips along the bottom of the hero. */
 export function ProductTrain({ items }: ProductTrainProps) {
+  const { t } = useI18n()
   if (items.length === 0) return null
 
   const row = repeatToLength(items, 8)
 
   return (
     <div className={styles.train}>
-      <ul className={styles.track} aria-label="Pieces in the collection">
+      <ul className={styles.track} aria-label={t.home.trainLabel}>
         {/* Two identical halves so the -50% slide loops seamlessly; only the first is announced. */}
         {[0, 1].map((half) =>
           row.map((item, index) => {

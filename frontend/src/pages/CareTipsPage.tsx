@@ -1,4 +1,3 @@
-import { Link } from 'react-router'
 
 import { fetchCarePage } from '../api/client'
 import type { CarePageData } from '../api/types'
@@ -7,14 +6,15 @@ import { CandlelitScene, ShelfScene } from '../components/care/Scenes'
 import { SectionNav } from '../components/common/SectionNav'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
 import { useSite } from '../context/site'
+import { useI18n } from '../i18n/context'
+import { Link } from '../i18n/Link'
 import { useAsync } from '../hooks/useAsync'
 import { itemPath } from '../lib/items'
 import styles from './CareTipsPage.module.css'
 
-const PAGE_TITLE = 'Candle Care & Tips'
-
 export function CareTipsPage() {
-  const page = useAsync('care', fetchCarePage)
+  const { locale } = useI18n()
+  const page = useAsync(`care/${locale}`, (signal) => fetchCarePage(locale, signal))
 
   if (page.status === 'loading') return <LoadingScreen variant="page" />
   if (page.status === 'error') {
@@ -25,22 +25,20 @@ export function CareTipsPage() {
 
 function CareTipsView({ page }: { page: CarePageData }) {
   const { content, formatPrice } = useSite()
+  const { t } = useI18n()
   const product = page.fragrance_product
 
   const sections = [
-    page.tips.length > 0 && { id: 'tips', label: 'Tips' },
-    page.rituals.length > 0 && { id: 'care', label: 'Care' },
-    { id: 'fragrance', label: 'Fragrance' },
-    page.faqs.length > 0 && { id: 'faq', label: 'FAQ' },
+    page.tips.length > 0 && { id: 'tips', label: t.care.sectionTips },
+    page.rituals.length > 0 && { id: 'care', label: t.care.sectionCare },
+    { id: 'fragrance', label: t.care.sectionFragrance },
+    page.faqs.length > 0 && { id: 'faq', label: t.care.sectionFaq },
   ].filter((link): link is { id: string; label: string } => Boolean(link))
 
   return (
     <div id="top" className={styles.page}>
-      <title>{`${PAGE_TITLE} — ${content.studio_name}`}</title>
-      <meta
-        name="description"
-        content="How to burn, care for and reuse your hand-painted candles: first burn, wick trimming, placement, care rituals and FAQ."
-      />
+      <title>{`${t.care.pageTitle} — ${content.studio_name}`}</title>
+      <meta name="description" content={t.care.description} />
       {/* Dark top that fades into the cream page, as in the design. */}
       <div className={styles.backdrop} aria-hidden="true" />
 
@@ -52,7 +50,7 @@ function CareTipsView({ page }: { page: CarePageData }) {
           </div>
           <CandlelitScene
             photo={page.hero_image}
-            label="Painted candles glowing on a wooden table in a dark, warm room"
+            label={t.care.heroSceneLabel}
           />
         </section>
 
@@ -107,7 +105,7 @@ function CareTipsView({ page }: { page: CarePageData }) {
             ))}
           </ul>
         </div>
-        <ShelfScene photo={page.fragrance_image} label="Painted bauble candles on a warm wooden shelf">
+        <ShelfScene photo={page.fragrance_image} label={t.care.shelfSceneLabel}>
           {product && (
             <Link to={itemPath(product)} className={styles.productChip}>
               {product.title} · {formatPrice(product.price)}
@@ -118,7 +116,7 @@ function CareTipsView({ page }: { page: CarePageData }) {
 
       <Faq title={page.faq_title} items={page.faqs} />
 
-      <SectionNav title={PAGE_TITLE} links={sections} />
+      <SectionNav title={t.care.pageTitle} links={sections} />
     </div>
   )
 }

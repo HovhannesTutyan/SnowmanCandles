@@ -1,6 +1,8 @@
 import { createBrowserRouter, type RouteObject } from 'react-router'
 
 import { SiteLayout } from './components/layout/SiteLayout'
+import { LocaleRoot } from './i18n/LocaleRoot'
+import { LOCALE_PREFIX, LOCALES } from './i18n/locales'
 import { CareTipsPage } from './pages/CareTipsPage'
 import { DecoratePage } from './pages/DecoratePage'
 import { HomePage } from './pages/HomePage'
@@ -9,20 +11,21 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { ProductPage } from './pages/ProductPage'
 import { RouteErrorPage } from './pages/RouteErrorPage'
 
-export const routes: RouteObject[] = [
-  {
-    element: <SiteLayout />,
-    errorElement: <RouteErrorPage />,
-    children: [
-      { index: true, element: <HomePage /> },
-      { path: 'candles/:slug', element: <ProductPage kind="candle" /> },
-      { path: 'collections/:slug', element: <ProductPage kind="collection" /> },
-      { path: 'candle-care', element: <CareTipsPage /> },
-      { path: 'ingredients', element: <IngredientsPage /> },
-      { path: 'decorate', element: <DecoratePage /> },
-      { path: '*', element: <NotFoundPage /> },
-    ],
-  },
+const pages: RouteObject[] = [
+  { index: true, element: <HomePage /> },
+  { path: 'candles/:slug', element: <ProductPage kind="candle" /> },
+  { path: 'collections/:slug', element: <ProductPage kind="collection" /> },
+  { path: 'candle-care', element: <CareTipsPage /> },
+  { path: 'ingredients', element: <IngredientsPage /> },
+  { path: 'decorate', element: <DecoratePage /> },
+  { path: '*', element: <NotFoundPage /> },
 ]
+
+/** The same pages under each language: "/" (Armenian), "/en/…" and "/ru/…". */
+export const routes: RouteObject[] = LOCALES.map((locale) => ({
+  path: LOCALE_PREFIX[locale] || '/',
+  element: <LocaleRoot locale={locale} />,
+  children: [{ element: <SiteLayout />, errorElement: <RouteErrorPage />, children: pages }],
+}))
 
 export const router = createBrowserRouter(routes)

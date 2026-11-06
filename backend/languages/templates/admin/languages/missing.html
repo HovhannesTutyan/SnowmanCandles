@@ -1,0 +1,54 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a> › Missing translations
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="lang-missing-page">
+  <p class="lang-missing-intro">
+    Texts that have English but no Armenian or Russian version yet. Until you add one, the
+    site shows the English text in that language. Click a page to fill them in{% if provider %}, or use its <em>Translate missing</em> button{% endif %}.
+  </p>
+
+  {% if items %}
+    <ul class="lang-panel-counts">
+      {% for name, count in summary %}
+        <li class="{% if count %}is-missing{% else %}is-done{% endif %}">
+          <strong>{{ name }}</strong>
+          {% if count %}{{ count }} text{{ count|pluralize }} missing{% else %}all translated ✓{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    <table class="lang-missing-table">
+      <thead>
+        <tr>
+          <th scope="col">Where</th>
+          <th scope="col">Item</th>
+          {% for name, count in summary %}<th scope="col" class="num">{{ name }}</th>{% endfor %}
+          <th scope="col"><span class="visually-hidden">Edit</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.section }}</td>
+            <td>{{ item.label|truncatechars:70 }}</td>
+            {% for fields in item.cells %}
+              <td class="num {% if fields %}is-missing{% else %}is-done{% endif %}"
+                  {% if fields %}title="Missing: {{ fields|join:', ' }}"{% endif %}>
+                {% if fields %}{{ fields|length }}{% else %}✓{% endif %}
+              </td>
+            {% endfor %}
+            <td><a class="button" href="{{ item.url }}">Edit</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="lang-panel-done">Every text has an Armenian and a Russian version ✓</p>
+  {% endif %}
+</div>
+{% endblock %}

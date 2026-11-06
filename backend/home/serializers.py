@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from languages.conf import localized_field_names
+
 from .models import CONTENT_IMAGE_FIELDS, HeroSlide, HomePageContent
 
 
@@ -23,15 +25,18 @@ class HeroSlideSerializer(serializers.ModelSerializer):
 
     def get_link(self, obj):
         if obj.candle:
-            item, link_type, label = obj.candle, "candle", obj.candle.get_product_type_display()
+            item, link_type, product_type = obj.candle, "candle", obj.candle.product_type
+            label = obj.candle.get_product_type_display()
         elif obj.collection:
-            item, link_type, label = obj.collection, "collection", "Collection"
+            item, link_type, product_type, label = obj.collection, "collection", "collection", "Collection"
         else:
             return None
         return {
             "type": link_type,
             "slug": item.slug,
             "price": f"{item.price:.2f}",
+            # The site shows the type in the visitor's language; the label is English.
+            "product_type": product_type,
             "product_type_label": label,
         }
 
@@ -42,8 +47,11 @@ class HomePageContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HomePageContent
-        # Images are returned together under "images".
-        exclude = ["id", "updated_at", *CONTENT_IMAGE_FIELDS]
+        # Images are returned together under "images"; translated fields once, in the
+        # requested language (not one column per language).
+        exclude = [
+            "id", "updated_at", *CONTENT_IMAGE_FIELDS, *localized_field_names(HomePageContent),
+        ]
 
     def get_images(self, obj):
         """Absolute URLs, or null where the frontend should use the design's image."""

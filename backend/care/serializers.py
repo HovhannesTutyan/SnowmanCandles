@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from languages.conf import localized_field_names
+
 from shop.serializers import CandleSerializer
 
 from .models import FAQ, CarePage, CareRitual, CareTip, FragranceTip
@@ -40,4 +42,5 @@ class CarePageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarePage
-        exclude = ["id", "updated_at"]
+        # Translated fields once, in the requested language.
+        exclude = ["id", "updated_at", *localized_field_names(CarePage)]

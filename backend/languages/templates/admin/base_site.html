@@ -1,0 +1,11 @@
+{% extends "admin/base_site.html" %}
+{% load static languages_admin %}
+{% comment %}
+  Adds the translation helpers (language groups, Translate buttons, missing markers) to
+  every admin page. The script does nothing on pages without translated fields.
+{% endcomment %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'languages/admin.css' %}">{% endblock %}
+{% block extrahead %}{{ block.super }}
+{% languages_config as config %}{{ config|json_script:"languages-config" }}
+<script src="{% static 'languages/admin.js' %}" defer></script>
+{% endblock %}

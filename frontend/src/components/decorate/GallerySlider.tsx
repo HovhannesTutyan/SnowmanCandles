@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react'
 
 import type { GalleryPicture } from '../../api/types'
+import { useI18n } from '../../i18n/context'
 import { ArrowRightIcon } from '../icons'
 import styles from './GallerySlider.module.css'
 
@@ -21,6 +22,7 @@ export function GallerySlider({ pictures, onOpen }: GallerySliderProps) {
   const justDragged = useRef(false)
   const [position, setPosition] = useState({ atStart: true, atEnd: false, progress: 0 })
   const count = pictures.length
+  const { t } = useI18n()
 
   const update = useCallback(() => {
     const track = trackRef.current
@@ -89,7 +91,7 @@ export function GallerySlider({ pictures, onOpen }: GallerySliderProps) {
         tabIndex={0}
         role="region"
         aria-roledescription="carousel"
-        aria-label={`Styling gallery, ${count} pictures. Use the left and right arrow keys to scroll.`}
+        aria-label={t.decorate.galleryLabel(count)}
         onScroll={update}
         onKeyDown={(event) => {
           if (event.key === 'ArrowRight') {
@@ -110,7 +112,7 @@ export function GallerySlider({ pictures, onOpen }: GallerySliderProps) {
             key={picture.id}
             type="button"
             className={styles.slide}
-            aria-label={`Open picture ${index + 1} of ${count}: ${picture.caption}`}
+            aria-label={t.decorate.openPicture(index + 1, count, picture.caption)}
             onClick={() => {
               if (justDragged.current) {
                 justDragged.current = false // a drag, not a click
@@ -138,7 +140,7 @@ export function GallerySlider({ pictures, onOpen }: GallerySliderProps) {
           <button
             type="button"
             className={styles.navButton}
-            aria-label="Previous pictures"
+            aria-label={t.decorate.previousPictures}
             onClick={() => go(-1)}
             disabled={position.atStart}
           >
@@ -150,7 +152,7 @@ export function GallerySlider({ pictures, onOpen }: GallerySliderProps) {
           <button
             type="button"
             className={styles.navButton}
-            aria-label="Next pictures"
+            aria-label={t.decorate.nextPictures}
             onClick={() => go(1)}
             disabled={position.atEnd}
           >

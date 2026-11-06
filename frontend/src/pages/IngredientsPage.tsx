@@ -1,4 +1,3 @@
-import { Link } from 'react-router'
 
 import { fetchIngredientsPage } from '../api/client'
 import type { IngredientsPageData } from '../api/types'
@@ -9,11 +8,16 @@ import { ChapterSection } from '../components/ingredients/ChapterSection'
 import { Grain } from '../components/ingredients/Illustrations'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
 import { useSite } from '../context/site'
+import { useI18n } from '../i18n/context'
+import { Link } from '../i18n/Link'
 import { useAsync } from '../hooks/useAsync'
 import styles from './IngredientsPage.module.css'
 
 export function IngredientsPage() {
-  const page = useAsync('ingredients', fetchIngredientsPage)
+  const { locale } = useI18n()
+  const page = useAsync(`ingredients/${locale}`, (signal) =>
+    fetchIngredientsPage(locale, signal),
+  )
 
   if (page.status === 'loading') return <LoadingScreen variant="page" />
   if (page.status === 'error') {
@@ -24,15 +28,13 @@ export function IngredientsPage() {
 
 function IngredientsView({ page }: { page: IngredientsPageData }) {
   const { content } = useSite()
+  const { t } = useI18n()
   const first = page.chapters[0]
 
   return (
     <div id="top" className={styles.page}>
       <title>{`${page.hero_title} — ${content.studio_name}`}</title>
-      <meta
-        name="description"
-        content="Soy wax, hand-cast plaster, wicks, fragrance and colour: everything that goes into our handmade candles."
-      />
+      <meta name="description" content={t.ingredients.description} />
       {/* Dark top that fades into the cream page, as in the design. */}
       <div className={styles.backdrop} aria-hidden="true" />
 
@@ -62,7 +64,7 @@ function IngredientsView({ page }: { page: IngredientsPageData }) {
               <div
                 className={styles.linen}
                 role="img"
-                aria-label="An unpainted plaster vessel with raised holly relief on warm linen"
+                aria-label={t.ingredients.heroSceneLabel}
               >
                 <Grain frequency="0.9 0.06" seed={4} tint="0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .35  0 0 0 .5 0" opacity={0.5} />
                 <div className={styles.linenShadow} />
@@ -92,7 +94,7 @@ function IngredientsView({ page }: { page: IngredientsPageData }) {
       {page.chapters.length > 0 && (
         <SectionNav
           title={page.nav_title}
-          label="Ingredients on this page"
+          label={t.ingredients.navLabel}
           links={page.chapters.map((chapter) => ({ id: chapter.anchor, label: chapter.nav_label }))}
         />
       )}

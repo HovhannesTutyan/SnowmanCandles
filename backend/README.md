@@ -55,6 +55,9 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 | `ALLOWED_HOSTS`        | `localhost,127.0.0.1`                       | Comma-separated.                        |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:5173`                     | Comma-separated; the React dev server.  |
 | `DATABASE_URL`         | `postgres://user:pass@localhost:5432/shop`  | Optional. Defaults to SQLite.           |
+| `TRANSLATION_PROVIDER` | `claude` or `google`                        | Optional. Turns on the admin's **Translate** button (see [Languages](#languages-english-armenian-russian)). |
+| `TRANSLATION_API_KEY`  | *(API key)*                                 | Optional. The provider's key. Never commit it. |
+| `TRANSLATION_MODEL`    | `claude-opus-5-5`                           | Optional, Claude only.                  |
 
 **Switching to PostgreSQL:** run `pip install "psycopg[binary]"`, set `DATABASE_URL` in `.env`, then run the migrations again.
 
@@ -277,9 +280,54 @@ footer and the homepage's "Shop by type" section. Every section is editable:
 Without uploads, the hero and closing pictures fall back to the design's. The 16 gallery
 pictures from the design are demo content loaded by `python manage.py seed_demo`.
 
+## Languages (English, Armenian, Russian)
+
+The site is in **Armenian** (the default, at `/`), **English** (`/en/…`) and **Russian**
+(`/ru/…`). Every text you can edit in the admin has three boxes: the **English** one
+(required) and the **Armenian** and **Russian** ones under it. The interface texts written in
+the code (buttons, menus, labels) are translated in `frontend/src/i18n/messages/`.
+
+**In the admin**
+
+- Each translated field is a small group: **EN**, **HY**, **RU**. An empty Armenian or Russian
+  box is marked **Missing**; until it's filled, the site shows the English text there.
+- The bar at the top of every form shows how many translations are missing, a filter
+  (*All languages*, *English + Armenian*, *English + Russian*, *English only*) and
+  **Translate missing**. Each group also has its own **Translate** button.
+- Translations are filled into the form as **Draft – check**: read them, fix anything, then
+  **Save**. Nothing is saved before you press Save.
+- The admin home page has a **Translations** box, and **Missing translations** lists every item
+  that still needs work, with a link to the page where it's edited. Product, slide, chapter and
+  gallery lists have a **Translations** column.
+
+**Turning on automatic translation.** The Translate buttons stay disabled until a service is
+set in `.env`, then restart the server:
+
+```ini
+TRANSLATION_PROVIDER=claude      # or: google
+TRANSLATION_API_KEY=your-key
+```
+
+- `claude` uses the Anthropic API (also run `pip install anthropic`). It is told about the shop:
+  natural copy, "candle" wording, Markdown bold and line breaks kept. Default model
+  `claude-opus-5-5` (`TRANSLATION_MODEL` to change it).
+- `google` uses Google Cloud Translation (v2, API key). Cheaper, more literal.
+
+Machine translation is a draft, especially for Armenian: have a native speaker read new texts.
+
+**Built-in translations.** Armenian and Russian versions of all the current texts (pages, demo
+products, gallery, care tips…) are in `languages/content_translations.json`. They were filled in
+when the languages were added (a migration), `seed_demo` uses them, and
+`python manage.py fill_translations` fills any empty translation they cover — it never
+overwrites one you wrote.
+
+**API.** Add `?lang=hy`, `?lang=ru` or `?lang=en` (the default) to any endpoint; translated
+fields come back in that language, falling back to English when a translation is empty.
+
 ## API
 
-All endpoints are read-only (`GET`).
+All endpoints are read-only (`GET`). Add `?lang=hy|en|ru` for a language
+(see [Languages](#languages-english-armenian-russian)).
 
 | Endpoint                         | Description                                          |
 | -------------------------------- | ---------------------------------------------------- |

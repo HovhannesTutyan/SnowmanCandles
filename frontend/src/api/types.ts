@@ -18,6 +18,7 @@ export interface ShopItem {
   is_available: boolean
   is_featured: boolean
   product_type: ProductType
+  /** English; the site shows `product_type` in the visitor's language instead. */
   product_type_label: string
   created_at: string
   updated_at: string
@@ -31,6 +32,8 @@ export interface SlideLink {
   type: 'candle' | 'collection'
   slug: string
   price: string
+  product_type: ProductType
+  /** English; the site shows `product_type` in the visitor's language instead. */
   product_type_label: string
 }
 
@@ -255,7 +258,9 @@ export interface DecoratePageData {
   hero_title: string
   hero_text: string
   hero_link_text: string
-  /** Absolute URL, or null: use the design's picture. */
+  /** Absolute URL of a silent looping video shown instead of the picture, or null. */
+  hero_video: string | null
+  /** Absolute URL, or null: use the design's picture. Also the video's poster. */
   hero_image: string | null
   hero_image_alt: string
   story_title: string

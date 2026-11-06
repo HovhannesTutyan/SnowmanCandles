@@ -1,6 +1,7 @@
-import { Link } from 'react-router'
 
 import type { SiteContent } from '../../api/types'
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
 import { ArrowRightIcon, BrushIcon, PlayIcon } from '../icons'
 import styles from './HowItsMade.module.css'
 
@@ -10,6 +11,7 @@ interface HowItsMadeProps {
 }
 
 export function HowItsMade({ content, images }: HowItsMadeProps) {
+  const { t } = useI18n()
   const steps = [
     { title: content.step1_title, text: content.step1_text, className: styles.step1 },
     { title: content.step2_title, text: content.step2_text, className: styles.step2 },
@@ -35,11 +37,11 @@ export function HowItsMade({ content, images }: HowItsMadeProps) {
     <section id="made" className={styles.section} aria-labelledby="made-title">
       <div className={styles.inner}>
         <div className={`${styles.intro} reveal`}>
-          <p className={styles.eyebrow}>How it's made</p>
+          <p className={styles.eyebrow}>{t.home.madeEyebrow}</p>
           <h2 id="made-title" className={styles.title}>{content.made_title}</h2>
           <p className={styles.text}>{content.made_text}</p>
           <Link to="/candle-care" className={styles.careLink}>
-            Candle care &amp; tips
+            {t.home.careLink}
             <ArrowRightIcon />
           </Link>
         </div>
@@ -48,11 +50,11 @@ export function HowItsMade({ content, images }: HowItsMadeProps) {
           {/* Plaster to painted: the painted image is wiped in behind the brush. */}
           <div className={`${styles.paintBox} reveal`}>
             <div className={styles.paintStage}>
-              <img className={styles.paintImage} src={images.before} alt="Unpainted plaster piece" />
+              <img className={styles.paintImage} src={images.before} alt={t.home.beforeAlt} />
               <img
                 className={`${styles.paintImage} ${styles.painted}`}
                 src={images.after}
-                alt="The same piece after hand-painting"
+                alt={t.home.afterAlt}
               />
               <div className={styles.brush} aria-hidden="true">
                 <BrushIcon />
@@ -79,7 +81,7 @@ export function HowItsMade({ content, images }: HowItsMadeProps) {
                 href={content.video_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Play the video: ${content.video_title} (opens in a new tab)`}
+                aria-label={t.home.playVideo(content.video_title)}
               >
                 {videoInner}
               </a>

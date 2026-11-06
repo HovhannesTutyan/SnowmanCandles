@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import { useI18n } from '../i18n/context'
 import { LogoIcon } from './icons'
 import styles from './StatusScreen.module.css'
 
@@ -7,12 +8,13 @@ import styles from './StatusScreen.module.css'
 type Variant = 'full' | 'page'
 
 export function LoadingScreen({ variant = 'full' }: { variant?: Variant }) {
+  const { t } = useI18n()
   return (
     <div className={`${styles.screen} ${styles[variant]}`} role="status" aria-live="polite">
       <span className={styles.logo}>
         <LogoIcon size={56} />
       </span>
-      <span className="visually-hidden">Loading…</span>
+      <span className="visually-hidden">{t.status.loading}</span>
     </div>
   )
 }
@@ -24,18 +26,19 @@ interface ErrorScreenProps {
 }
 
 export function ErrorScreen({ error, onRetry, variant = 'full' }: ErrorScreenProps) {
+  const { t } = useI18n()
   return (
     <MessageScreen
       variant={variant}
       role="alert"
-      title="The shop couldn't load"
+      title={t.status.loadFailed}
       action={
         <button type="button" className={styles.button} onClick={onRetry}>
-          Try again
+          {t.status.tryAgain}
         </button>
       }
     >
-      Please check your connection and try again.
+      {t.status.checkConnection}
       {import.meta.env.DEV && (
         <>
           <br />

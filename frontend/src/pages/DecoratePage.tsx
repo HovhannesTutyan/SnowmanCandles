@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router'
 
 import { fetchDecoratePage } from '../api/client'
 import type { DecoratePageData } from '../api/types'
@@ -11,12 +10,16 @@ import { Lightbox } from '../components/decorate/Lightbox'
 import { ArrowRightIcon } from '../components/icons'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
 import { useSite } from '../context/site'
+import { useI18n } from '../i18n/context'
+import { Link } from '../i18n/Link'
 import { useAsync } from '../hooks/useAsync'
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import { toParagraphs } from '../lib/text'
 import styles from './DecoratePage.module.css'
 
 export function DecoratePage() {
-  const page = useAsync('decorate', fetchDecoratePage)
+  const { locale } = useI18n()
+  const page = useAsync(`decorate/${locale}`, (signal) => fetchDecoratePage(locale, signal))
 
   if (page.status === 'loading') return <LoadingScreen variant="page" />
   if (page.status === 'error') {
@@ -27,16 +30,15 @@ export function DecoratePage() {
 
 function DecorateView({ page }: { page: DecoratePageData }) {
   const { content } = useSite()
+  const { t } = useI18n()
   const [viewing, setViewing] = useState<number | null>(null)
+  const reducedMotion = usePrefersReducedMotion()
   const hasGallery = page.gallery.length > 0
 
   return (
     <div id="top" className={styles.page}>
-      <title>{`Decorate with candles — ${content.studio_name}`}</title>
-      <meta
-        name="description"
-        content="Styling ideas for candles and hand-cast plaster décor, room by room, with a gallery of candlelit scenes."
-      />
+      <title>{`${t.decorate.pageTitle} — ${content.studio_name}`}</title>
+      <meta name="description" content={t.decorate.description} />
       {/* Dark top that fades into the cream page, as in the design. */}
       <div className={styles.backdrop} aria-hidden="true" />
 
@@ -59,7 +61,24 @@ function DecorateView({ page }: { page: DecoratePageData }) {
             )}
           </div>
           <div className={styles.heroPicture}>
-            <img src={page.hero_image ?? heroShelf} alt={page.hero_image_alt} />
+            {page.hero_video ? (
+              // Silent and looping, like a moving picture. Visitors who prefer less motion
+              // get the first frame and can press play themselves.
+              <video
+                key={`${page.hero_video}-${reducedMotion}`}
+                src={page.hero_video}
+                poster={page.hero_image ?? undefined}
+                aria-label={page.hero_image_alt}
+                autoPlay={!reducedMotion}
+                controls={reducedMotion}
+                muted
+                loop
+                playsInline
+                preload={reducedMotion ? 'none' : 'auto'}
+              />
+            ) : (
+              <img src={page.hero_image ?? heroShelf} alt={page.hero_image_alt} />
+            )}
           </div>
         </section>
 
@@ -79,7 +98,7 @@ function DecorateView({ page }: { page: DecoratePageData }) {
           )}
 
           {page.rooms.length > 0 && (
-            <ul className={styles.rooms} aria-label="Styling ideas by room">
+            <ul className={styles.rooms} aria-label={t.decorate.rooms}>
               {page.rooms.map((room, index) => {
                 const picture = room.gallery_index === null ? null : page.gallery[room.gallery_index]
                 const inner = (
@@ -101,7 +120,7 @@ function DecorateView({ page }: { page: DecoratePageData }) {
                       <button
                         type="button"
                         className={styles.roomButton}
-                        aria-label={`${room.title}: ${room.text} Open styling picture.`}
+                        aria-label={t.decorate.openRoom(room.title, room.text)}
                         onClick={() => setViewing(room.gallery_index)}
                       >
                         {inner}

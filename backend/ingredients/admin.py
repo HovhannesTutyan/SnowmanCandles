@@ -4,6 +4,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
 
+from languages.admin import TranslatedAdmin, TranslatedStackedInline
+
 from .models import (
     Chapter,
     ChapterCard,
@@ -26,7 +28,7 @@ def photo_preview(image):
 
 
 @admin.register(IngredientsPage)
-class IngredientsPageAdmin(admin.ModelAdmin):
+class IngredientsPageAdmin(TranslatedAdmin):
     """Hero and closing texts. A single page: the list view jumps straight to the form."""
 
     readonly_fields = ["hero_image_preview", "updated_at"]
@@ -58,8 +60,9 @@ class IngredientsPageAdmin(admin.ModelAdmin):
         return redirect(reverse("admin:ingredients_ingredientspage_change", args=[obj.pk]))
 
 
-class ItemInline(admin.TabularInline):
+class ItemInline(TranslatedStackedInline):
     extra = 0
+    classes = ["collapse"]
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "color":
@@ -83,19 +86,19 @@ class QuestionInline(ItemInline):
 
 class CardInline(ItemInline):
     model = ChapterCard
-    fields = ["icon", "title", "text", "order"]
+    fields = [("icon", "order"), "title", "text"]
     verbose_name_plural = "Cards (under the text, with the cards title above)"
 
 
 class SwatchInline(ItemInline):
     model = ChapterSwatch
-    fields = ["color", "name", "note", "order"]
+    fields = [("color", "order"), "name", "note"]
     verbose_name_plural = "Colour swatches"
 
 
 @admin.register(Chapter)
-class ChapterAdmin(admin.ModelAdmin):
-    list_display = ["title", "nav_label", "anchor", "order", "is_published"]
+class ChapterAdmin(TranslatedAdmin):
+    list_display = ["title", "nav_label", "anchor", "order", "is_published", "translation_status"]
     list_display_links = ["title"]
     list_editable = ["order", "is_published"]
     list_filter = ["is_published"]

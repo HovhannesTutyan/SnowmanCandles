@@ -1,6 +1,8 @@
 import io
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
@@ -30,9 +32,23 @@ class DecorateApiTests(MediaTestMixin, APITestCase):
         )
         self.assertIsNone(data["rooms"][0]["gallery_index"])  # no pictures yet
         self.assertEqual(data["gallery"], [])
+        self.assertIsNone(data["hero_video"])
         self.assertIsNone(data["hero_image"])
         self.assertIsNone(data["cta_image"])
         self.assertNotIn("id", data)
+
+    def test_hero_video_url(self):
+        page = DecoratePage.load()
+        page.hero_video = SimpleUploadedFile("loop.mp4", b"fake mp4 data", content_type="video/mp4")
+        page.save()
+        data = self.client.get(self.url).data
+        self.assertTrue(data["hero_video"].startswith("http://testserver/media/decorate/video/loop"))
+
+    def test_hero_video_must_be_a_video_file(self):
+        page = DecoratePage.load()
+        page.hero_video = SimpleUploadedFile("notes.pdf", b"%PDF", content_type="application/pdf")
+        with self.assertRaises(ValidationError):
+            page.full_clean()
 
     def test_default_texts_mention_no_jars_or_keepsakes(self):
         page = DecoratePage.load()
@@ -113,6 +129,9 @@ class SeedDemoDecorateTests(MediaTestMixin, TestCase):
         call_command("seed_demo", stdout=io.StringIO())
         call_command("seed_demo", stdout=io.StringIO())
         self.assertEqual(GalleryImage.objects.count(), 16)
+        page = DecoratePage.load()
+        self.assertTrue(page.hero_video.name.startswith("decorate/video/hero-video"))
+        self.assertTrue(page.hero_image.name.startswith("decorate/hero-video-poster"))
         living = Room.objects.get(title="Living room")
         self.assertEqual(living.picture.caption, "Carousel Candle + Holly Bauble on a linen shelf")
         self.assertEqual(

@@ -91,7 +91,7 @@ describe('IngredientsPage', () => {
     expect(within(colour).getByRole('list', { name: 'Colour palette' })).toBeInTheDocument()
     expect(within(colour).getByText('Fresh & herbal')).toBeInTheDocument()
 
-    expect(screen.getByRole('link', { name: 'Shop Candles' })).toHaveAttribute('href', '/#winter')
+    expect(screen.getByRole('link', { name: 'Shop Candles' })).toHaveAttribute('href', '/en#winter')
   })
 
   it('opens questions independently, with the first one open', async () => {
@@ -146,13 +146,13 @@ describe('IngredientsPage', () => {
     await screen.findByRole('heading', { level: 1 })
 
     const header = screen.getByRole('banner')
-    expect(within(header).getByRole('link', { name: 'Candle care' })).toHaveAttribute('href', '/candle-care')
+    expect(within(header).getByRole('link', { name: 'Candle care' })).toHaveAttribute('href', '/en/candle-care')
     const footer = screen.getByRole('contentinfo')
-    expect(within(footer).getByRole('link', { name: "What's inside our candles" })).toHaveAttribute('href', '/ingredients')
+    expect(within(footer).getByRole('link', { name: "What's inside our candles" })).toHaveAttribute('href', '/en/ingredients')
 
     fireEvent.click(within(header).getByRole('link', { name: 'Ingredients' }))
     expect(await screen.findByRole('heading', { level: 1, name: "What's inside our candles" })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/ingredients')
+    expect(router.state.location.pathname).toBe('/en/ingredients')
     expect(within(screen.getByRole('banner')).getByRole('link', { name: 'Ingredients' })).toHaveAttribute(
       'aria-current',
       'page',

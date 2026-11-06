@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import type { DecoratePageData, GalleryPicture } from '../api/types'
 import { makeContent, makeHomeData } from '../test/fixtures'
 import { mockApi, renderApp } from '../test/renderApp'
+import { setReducedMotion } from '../test/setup'
 
 function picture(id: number, caption: string, products: GalleryPicture['products'] = []): GalleryPicture {
   return { id, image: `http://localhost/media/decorate/gallery/${id}.webp`, caption, alt: `${caption} (alt)`, products }
@@ -15,6 +16,7 @@ function makeDecoratePage(overrides: Partial<DecoratePageData> = {}): DecoratePa
     hero_title: 'Decorate\nwith light',
     hero_text: 'Ideas for styling candles in every room.',
     hero_link_text: 'Browse the gallery',
+    hero_video: null,
     hero_image: null,
     hero_image_alt: 'A styled oak shelf',
     story_title: 'A home feels finished with candlelight',
@@ -64,7 +66,7 @@ describe('DecoratePage', () => {
     // A room without a picture is shown, but isn't clickable.
     expect(within(rooms).getAllByRole('button')).toHaveLength(1)
 
-    expect(screen.getByRole('link', { name: 'Shop Candles' })).toHaveAttribute('href', '/#winter')
+    expect(screen.getByRole('link', { name: 'Shop Candles' })).toHaveAttribute('href', '/en#winter')
   })
 
   it('opens a room picture in the viewer and moves through the gallery', async () => {
@@ -83,7 +85,7 @@ describe('DecoratePage', () => {
     // Candles in the picture link to their product pages.
     expect(within(viewer).getByRole('link', { name: 'Vintage Roadster Candle' })).toHaveAttribute(
       'href',
-      '/candles/vintage-roadster-candle',
+      '/en/candles/vintage-roadster-candle',
     )
 
     fireEvent.keyDown(document, { key: 'Escape' })
@@ -118,6 +120,31 @@ describe('DecoratePage', () => {
     expect(container.querySelector('img[src="http://localhost/media/decorate/cta.jpg"]')).toBeInTheDocument()
   })
 
+  it('plays the hero video, silently on a loop, instead of the picture', async () => {
+    const { container } = renderDecorate({
+      hero_video: 'http://localhost/media/decorate/video/hero.mp4',
+      hero_image: 'http://localhost/media/decorate/poster.jpg',
+    })
+    await screen.findByRole('heading', { level: 1 })
+    const video = container.querySelector('video') as HTMLVideoElement
+    expect(video).toHaveAttribute('src', 'http://localhost/media/decorate/video/hero.mp4')
+    expect(video).toHaveAttribute('poster', 'http://localhost/media/decorate/poster.jpg')
+    expect(video).toHaveAttribute('aria-label', 'A styled oak shelf')
+    expect(video.muted).toBe(true)
+    expect(video.loop).toBe(true)
+    expect(video.autoplay).toBe(true)
+    expect(screen.queryByAltText('A styled oak shelf')).not.toBeInTheDocument()
+  })
+
+  it('does not autoplay the hero video for visitors who prefer reduced motion', async () => {
+    setReducedMotion(true)
+    const { container } = renderDecorate({ hero_video: 'http://localhost/media/decorate/video/hero.mp4' })
+    await screen.findByRole('heading', { level: 1 })
+    const video = container.querySelector('video') as HTMLVideoElement
+    expect(video.autoplay).toBe(false)
+    expect(video.controls).toBe(true)
+  })
+
   it('is linked from the header, the footer and the homepage', async () => {
     mockApi({
       '/api/site/': makeContent(),
@@ -128,13 +155,13 @@ describe('DecoratePage', () => {
     await screen.findByRole('heading', { level: 1 })
 
     const footer = screen.getByRole('contentinfo')
-    expect(within(footer).getByRole('link', { name: 'Decorate with candles' })).toHaveAttribute('href', '/decorate')
+    expect(within(footer).getByRole('link', { name: 'Decorate with candles' })).toHaveAttribute('href', '/en/decorate')
     const shopByType = screen.getByRole('region', { name: 'Shop by type' })
-    expect(within(shopByType).getByRole('link', { name: /decorate with candles/ })).toHaveAttribute('href', '/decorate')
+    expect(within(shopByType).getByRole('link', { name: /decorate with candles/ })).toHaveAttribute('href', '/en/decorate')
 
     fireEvent.click(within(screen.getByRole('banner')).getByRole('link', { name: 'Inspiration' }))
     expect(await screen.findByRole('heading', { level: 1, name: /Decorate/ })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/decorate')
+    expect(router.state.location.pathname).toBe('/en/decorate')
     expect(within(screen.getByRole('banner')).getByRole('link', { name: 'Inspiration' })).toHaveAttribute(
       'aria-current',
       'page',

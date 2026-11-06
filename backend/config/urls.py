@@ -15,6 +15,7 @@ admin.site.site_title = "Candle Shop Admin"
 admin.site.index_title = "Manage candles & collections"
 
 urlpatterns = [
+    path("admin/languages/", include("languages.urls")),
     path("admin/", admin.site.urls),
     path("api/", include("home.urls")),
     path("api/care/", CarePageView.as_view(), name="care"),

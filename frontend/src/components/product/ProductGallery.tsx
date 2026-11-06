@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
 import type { ProductDetail } from '../../api/types'
+import { useI18n } from '../../i18n/context'
+import type { Messages } from '../../i18n/messages/en'
 import { Snowfall, type Flake } from '../home/Snowfall'
 import { Flame } from './Flame'
 import styles from './ProductGallery.module.css'
@@ -15,10 +17,10 @@ type View =
   | { kind: 'lit'; label: string }
   | { kind: 'photo'; label: string; image: string }
 
-function buildViews(product: ProductDetail): View[] {
+function buildViews(product: ProductDetail, t: Messages): View[] {
   return [
-    { kind: 'main', label: 'Main view' },
-    ...(product.flame ? [{ kind: 'lit', label: 'Lit' } as const] : []),
+    { kind: 'main', label: t.product.mainView },
+    ...(product.flame ? [{ kind: 'lit', label: t.product.lit } as const] : []),
     ...product.gallery.map((photo) => ({ kind: 'photo', label: photo.label, image: photo.image }) as const),
   ]
 }
@@ -32,7 +34,8 @@ interface ProductGalleryProps {
  * animated flame on the wick, and any extra photos uploaded in the admin.
  */
 export function ProductGallery({ product }: ProductGalleryProps) {
-  const views = buildViews(product)
+  const { t } = useI18n()
+  const views = buildViews(product, t)
   const [active, setActive] = useState(0)
   const view = views[active] ?? views[0]
   const lit = view.kind === 'lit'
@@ -44,12 +47,12 @@ export function ProductGallery({ product }: ProductGalleryProps) {
         style={{ backgroundColor: lit ? undefined : product.tint }}
       >
         {lit && <Snowfall flakes={LIT_FLAKES} />}
-        <span className={`${styles.chip} ${styles.chipTopLeft}`}>Hand-painted · each one unique</span>
+        <span className={`${styles.chip} ${styles.chipTopLeft}`}>{t.product.uniqueChip}</span>
 
         {/* Keyed so the entrance animation replays on every switch. */}
         <div key={active} className={styles.view}>
           {view.kind === 'photo' ? (
-            <img className={styles.photo} src={view.image} alt={`${product.title}: ${view.label}`} />
+            <img className={styles.photo} src={view.image} alt={t.product.photoAlt(product.title, view.label)} />
           ) : (
             <>
               <div className={`${styles.floor} ${lit ? styles.floorDark : ''}`} />
@@ -57,7 +60,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
                 <div className={`${styles.piece} ${lit ? styles.pieceLit : styles.zoomable}`}>
                   <img
                     src={product.image}
-                    alt={lit ? `${product.title}, lit` : product.title}
+                    alt={lit ? t.product.litAlt(product.title) : product.title}
                   />
                   {lit && product.flame && <Flame x={product.flame.x} y={product.flame.y} />}
                 </div>
@@ -72,7 +75,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
       </div>
 
       {views.length > 1 && (
-        <div className={styles.thumbs} role="group" aria-label="Product views">
+        <div className={styles.thumbs} role="group" aria-label={t.product.views}>
           {views.map((v, index) => (
             <button
               key={`${v.kind}-${index}`}

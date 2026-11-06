@@ -97,7 +97,8 @@
   background: #e9e2d6;
 }
 
-.heroPicture img {
+.heroPicture img,
+.heroPicture video {
   display: block;
   width: 100%;
   height: 100%;
@@ -376,7 +377,8 @@
     border-radius: 24px;
   }
   .heroPicture,
-  .heroPicture img {
+  .heroPicture img,
+  .heroPicture video {
     min-height: 380px;
   }
 }

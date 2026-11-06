@@ -56,13 +56,13 @@ class HomeApiTests(MediaTestMixin, APITestCase):
         self.assertEqual(
             from_candle["link"],
             {"type": "candle", "slug": "linked-candle", "price": "12.50",
-             "product_type_label": "Candle set"},
+             "product_type": "set", "product_type_label": "Candle set"},
         )
         self.assertEqual(from_collection["image"], "http://testserver" + collection.image.url)
         self.assertEqual(
             from_collection["link"],
             {"type": "collection", "slug": "linked-set", "price": "39.99",
-             "product_type_label": "Collection"},
+             "product_type": "collection", "product_type_label": "Collection"},
         )
 
     def test_inactive_slides_hidden_and_ordered(self):

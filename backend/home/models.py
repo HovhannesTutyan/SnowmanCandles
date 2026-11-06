@@ -278,7 +278,14 @@ class HomePageContent(models.Model):
 
     @classmethod
     def load(cls):
-        obj, _ = cls.objects.get_or_create(pk=1)
+        obj, created = cls.objects.get_or_create(pk=1)
+        if created:
+            # Armenian and Russian versions of the default texts.
+            from languages.catalog import fill_from_catalog
+            from languages.conf import translated_fields
+
+            if fill_from_catalog(obj, translated_fields(cls)):
+                obj.save()
         return obj
 
     @property

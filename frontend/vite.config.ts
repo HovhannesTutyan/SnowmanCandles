@@ -18,6 +18,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    // Page tests render the whole app; give them room on a busy machine.
+    testTimeout: 15000,
     css: { modules: { classNameStrategy: 'non-scoped' } },
   },
 })

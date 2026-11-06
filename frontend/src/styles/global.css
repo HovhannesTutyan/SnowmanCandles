@@ -1,3 +1,19 @@
+/*
+ * Armenian letters (Noto Sans Armenian, bundled from the font's OFL release). Armenian words
+ * run about 20% wider than Latin ones at the same size, so headings and paragraphs got much
+ * longer than in the design. size-adjust shrinks only the Armenian glyphs; Latin text, numbers
+ * and prices on Armenian pages keep the design's sizes.
+ */
+@font-face {
+  font-family: 'Shop Armenian';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/noto-sans-armenian.woff2') format('woff2-variations');
+  unicode-range: U+0308, U+0530-058F, U+2010, U+2024, U+25CC, U+FB13-FB17;
+  size-adjust: 85%;
+}
+
 /* Design tokens taken from the homepage mockup (Main.dc.html). */
 :root {
   --green-950: #0f261c;
@@ -19,8 +35,9 @@
   /* Overridden at runtime with the colour set in the admin. */
   --accent: #b4451a;
 
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-body: Figtree, system-ui, sans-serif;
+  /* Latin from the design fonts; Cyrillic from Onest, Armenian from Shop Armenian (above). */
+  --font-display: 'Bricolage Grotesque', Onest, 'Shop Armenian', sans-serif;
+  --font-body: Figtree, Onest, 'Shop Armenian', system-ui, sans-serif;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 

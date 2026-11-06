@@ -1,8 +1,9 @@
 import { useEffect, useRef, type TouchEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { Link } from 'react-router'
 
 import type { GalleryPicture } from '../../api/types'
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
 import { productPath } from '../../lib/items'
 import { ArrowRightIcon, CloseIcon } from '../icons'
 import styles from './Lightbox.module.css'
@@ -32,6 +33,7 @@ export function Lightbox({ pictures, index, onIndexChange, onClose }: LightboxPr
   const touchStart = useRef<number | null>(null)
   const count = pictures.length
   const picture = pictures[index]
+  const { t } = useI18n()
 
   const go = (delta: number) => onIndexChange((index + delta + count) % count)
 
@@ -96,7 +98,7 @@ export function Lightbox({ pictures, index, onIndexChange, onClose }: LightboxPr
       className={styles.backdrop}
       role="dialog"
       aria-modal="true"
-      aria-label="Picture viewer"
+      aria-label={t.decorate.viewer}
       tabIndex={-1}
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose() // click the dark backdrop
@@ -107,15 +109,15 @@ export function Lightbox({ pictures, index, onIndexChange, onClose }: LightboxPr
       <span className={styles.counter} aria-live="polite">
         {index + 1} / {count}
       </span>
-      <button type="button" className={styles.close} aria-label="Close picture viewer" onClick={onClose}>
+      <button type="button" className={styles.close} aria-label={t.decorate.closeViewer} onClick={onClose}>
         <CloseIcon size={22} />
       </button>
       {count > 1 && (
         <>
-          <button type="button" className={`${styles.nav} ${styles.prev}`} aria-label="Previous picture" onClick={() => go(-1)}>
+          <button type="button" className={`${styles.nav} ${styles.prev}`} aria-label={t.decorate.previousPicture} onClick={() => go(-1)}>
             <ArrowLeftIcon />
           </button>
-          <button type="button" className={`${styles.nav} ${styles.next}`} aria-label="Next picture" onClick={() => go(1)}>
+          <button type="button" className={`${styles.nav} ${styles.next}`} aria-label={t.decorate.nextPicture} onClick={() => go(1)}>
             <ArrowRightIcon size={22} />
           </button>
         </>
@@ -128,7 +130,7 @@ export function Lightbox({ pictures, index, onIndexChange, onClose }: LightboxPr
           {picture.caption}
           {picture.products.length > 0 && (
             <span className={styles.products}>
-              <span className={styles.productsLabel}>In this picture:</span>
+              <span className={styles.productsLabel}>{t.decorate.inThisPicture}</span>
               {picture.products.map((product) => (
                 <Link
                   key={product.slug}

@@ -10,7 +10,7 @@ export interface SiteContextValue {
 
 export const SiteContext = createContext<SiteContextValue | null>(null)
 
-/** Site-wide texts from the admin, plus a price formatter in the shop's currency. */
+/** Site-wide texts from the admin, plus a price formatter in the shop's currency and the visitor's language. */
 export function useSite(): SiteContextValue {
   const value = useContext(SiteContext)
   if (!value) throw new Error('useSite must be used inside <SiteProvider>.')

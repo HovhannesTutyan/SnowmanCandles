@@ -11,11 +11,13 @@ import { Newsletter } from '../components/home/Newsletter'
 import { ShopByType, type TypeTile } from '../components/home/ShopByType'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
 import { useSite } from '../context/site'
+import { useI18n } from '../i18n/context'
 import { useAsync } from '../hooks/useAsync'
 import { withDesignFallbacks } from '../lib/designImages'
 
 export function HomePage() {
-  const home = useAsync('home', fetchHome)
+  const { locale } = useI18n()
+  const home = useAsync(`home/${locale}`, (signal) => fetchHome(locale, signal))
 
   if (home.status === 'loading') return <LoadingScreen variant="page" />
   if (home.status === 'error') {
@@ -35,6 +37,7 @@ function useScrollToHash() {
 
 function HomeView({ data }: { data: HomeData }) {
   const { content, formatPrice } = useSite()
+  const { t } = useI18n()
   const { slides, featured_candles, featured_collections } = data
   useScrollToHash()
 
@@ -46,7 +49,7 @@ function HomeView({ data }: { data: HomeData }) {
 
   const tiles: TypeTile[] = [
     {
-      title: 'Single candles',
+      title: t.home.singleTile,
       text: content.single_tile_text,
       image: images.single_tile,
       background: '#8C2A1E',
@@ -54,7 +57,7 @@ function HomeView({ data }: { data: HomeData }) {
       imageStyle: { width: '64%', maxWidth: 360, margin: '0 -16px -10px 0' },
     },
     {
-      title: 'Candle sets',
+      title: t.home.setsTile,
       text: content.sets_tile_text,
       image: images.sets_tile,
       background: '#6B4A2E',
@@ -66,7 +69,7 @@ function HomeView({ data }: { data: HomeData }) {
   return (
     <>
       {/* React 19 hoists <title> into <head>. */}
-      <title>{`${content.studio_name} — hand-painted candles & candle sets`}</title>
+      <title>{t.home.pageTitle(content.studio_name)}</title>
       <Hero content={content} slides={slides} items={items} formatPrice={formatPrice} />
       <CollectionGrid
         eyebrow={content.collection_eyebrow}

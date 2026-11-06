@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from languages.conf import localized_field_names
+
 from .models import (
     Chapter,
     ChapterCard,
@@ -53,4 +55,5 @@ class ChapterSerializer(serializers.ModelSerializer):
 class IngredientsPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = IngredientsPage
-        exclude = ["id", "updated_at"]
+        # Translated fields once, in the requested language.
+        exclude = ["id", "updated_at", *localized_field_names(IngredientsPage)]

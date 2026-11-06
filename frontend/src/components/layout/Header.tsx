@@ -1,20 +1,23 @@
 import { useEffect, useId, useState } from 'react'
-import { Link, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 
 import { useCart } from '../../context/cart'
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
 import { BagIcon, CloseIcon, LogoIcon, MenuIcon, SearchIcon } from '../icons'
 import styles from './Header.module.css'
+import { LanguageSwitcher } from './LanguageSwitcher'
 
 // Homepage sections work from every page; the footer is on every page.
 const NAV_LINKS = [
-  { to: '/#winter', label: 'Shop' },
-  { to: '/#made', label: "How it's made" },
-  { to: '/decorate', label: 'Inspiration' },
-  { to: '/ingredients', label: 'Ingredients' },
-  { to: '/candle-care', label: 'Candle care' },
-  { to: '/#custom', label: 'Custom orders' },
-  { to: '#footer', label: 'Contact' },
-]
+  { to: '/#winter', key: 'shop' },
+  { to: '/#made', key: 'made' },
+  { to: '/decorate', key: 'inspiration' },
+  { to: '/ingredients', key: 'ingredients' },
+  { to: '/candle-care', key: 'care' },
+  { to: '/#custom', key: 'custom' },
+  { to: '#footer', key: 'contact' },
+] as const
 
 interface HeaderProps {
   studioName: string
@@ -25,6 +28,7 @@ export function Header({ studioName }: HeaderProps) {
   const navId = useId()
   const { count } = useCart()
   const { pathname } = useLocation()
+  const { t, path } = useI18n()
 
   useEffect(() => {
     if (!menuOpen) return
@@ -45,36 +49,37 @@ export function Header({ studioName }: HeaderProps) {
 
         <nav
           id={navId}
-          aria-label="Main"
+          aria-label={t.nav.main}
           className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}
         >
           {NAV_LINKS.map((link) =>
             link.to.startsWith('#') ? (
               <a key={link.to} href={link.to} onClick={() => setMenuOpen(false)}>
-                {link.label}
+                {t.nav[link.key]}
               </a>
             ) : (
               <Link
                 key={link.to}
                 to={link.to}
                 onClick={() => setMenuOpen(false)}
-                aria-current={link.to === pathname ? 'page' : undefined}
+                aria-current={path(link.to) === pathname ? 'page' : undefined}
               >
-                {link.label}
+                {t.nav[link.key]}
               </Link>
             ),
           )}
         </nav>
 
         <div className={styles.actions}>
+          <LanguageSwitcher />
           {/* Search is visual only; the cart counts items but has no page yet. */}
-          <button type="button" className={styles.iconButton} aria-label="Search">
+          <button type="button" className={styles.iconButton} aria-label={t.header.search}>
             <SearchIcon />
           </button>
           <button
             type="button"
             className={styles.iconButton}
-            aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}
+            aria-label={t.header.cart(count)}
           >
             <BagIcon />
             {count > 0 && (
@@ -87,7 +92,7 @@ export function Header({ studioName }: HeaderProps) {
           <button
             type="button"
             className={`${styles.iconButton} ${styles.menuButton}`}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={menuOpen ? t.header.closeMenu : t.header.openMenu}
             aria-expanded={menuOpen}
             aria-controls={navId}
             onClick={() => setMenuOpen((open) => !open)}

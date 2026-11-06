@@ -27,7 +27,7 @@ export function makeSlide(overrides: Partial<HeroSlide> = {}): HeroSlide {
     subtitle: '',
     image: 'http://localhost/media/candles/snowmen.webp',
     button_text: '',
-    link: { type: 'candle', slug: 'snowmen', price: '34.00', product_type_label: 'Candle set' },
+    link: { type: 'candle', slug: 'snowmen', price: '34.00', product_type: 'set', product_type_label: 'Candle set' },
     ...overrides,
   }
 }

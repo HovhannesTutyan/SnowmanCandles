@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
 
 import type { HeroSlide } from '../../api/types'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
+import type { Messages } from '../../i18n/messages/en'
 import type { PriceFormatter } from '../../lib/format'
 import { slideLinkPath } from '../../lib/items'
 import styles from './HeroShowcase.module.css'
@@ -16,9 +18,9 @@ interface HeroShowcaseProps {
   fallbackImage: string
 }
 
-function captionMeta(slide: HeroSlide, formatPrice: PriceFormatter) {
+function captionMeta(slide: HeroSlide, formatPrice: PriceFormatter, t: Messages) {
   if (slide.subtitle) return slide.subtitle
-  if (slide.link) return `${slide.link.product_type_label} · ${formatPrice(slide.link.price)}`
+  if (slide.link) return `${t.productType[slide.link.product_type]} · ${formatPrice(slide.link.price)}`
   return ''
 }
 
@@ -31,6 +33,7 @@ export function HeroShowcase({ slides, formatPrice, fallbackImage }: HeroShowcas
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
   const reducedMotion = usePrefersReducedMotion()
+  const { t } = useI18n()
   const count = slides.length
   const autoplay = count > 1 && !paused && !reducedMotion
 
@@ -122,7 +125,7 @@ export function HeroShowcase({ slides, formatPrice, fallbackImage }: HeroShowcas
                   )}
                 </div>
                 <div className={styles.captionMeta}>
-                  {captionMeta(slide, formatPrice)}
+                  {captionMeta(slide, formatPrice, t)}
                   {slide.button_text && (
                     <>
                       {' '}
@@ -150,7 +153,7 @@ export function HeroShowcase({ slides, formatPrice, fallbackImage }: HeroShowcas
                   key={slide.id}
                   type="button"
                   className={styles.bar}
-                  aria-label={`Show ${slide.title}`}
+                  aria-label={t.home.showSlide(slide.title)}
                   aria-current={index === current}
                   onClick={() => setActive(index)}
                 >

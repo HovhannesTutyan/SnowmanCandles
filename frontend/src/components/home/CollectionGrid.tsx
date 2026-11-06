@@ -1,5 +1,6 @@
 import type { ShopItem } from '../../api/types'
 import type { PriceFormatter } from '../../lib/format'
+import { useI18n } from '../../i18n/context'
 import { itemKey } from '../../lib/items'
 import { ArrowRightIcon } from '../icons'
 import styles from './CollectionGrid.module.css'
@@ -14,6 +15,7 @@ interface CollectionGridProps {
 
 /** The featured products ("The winter collection" in the design). */
 export function CollectionGrid({ eyebrow, title, items, formatPrice }: CollectionGridProps) {
+  const { t } = useI18n()
   return (
     <section id="winter" className={styles.section} aria-labelledby="winter-title">
       <div className={styles.inner}>
@@ -23,7 +25,7 @@ export function CollectionGrid({ eyebrow, title, items, formatPrice }: Collectio
             <h2 id="winter-title" className={styles.title}>{title}</h2>
           </div>
           <a href="#shop" className={styles.viewAll}>
-            View all pieces
+            {t.home.viewAll}
             <ArrowRightIcon />
           </a>
         </div>
@@ -35,7 +37,7 @@ export function CollectionGrid({ eyebrow, title, items, formatPrice }: Collectio
             ))}
           </div>
         ) : (
-          <p className={styles.empty}>New pieces are on their way — check back soon.</p>
+          <p className={styles.empty}>{t.home.empty}</p>
         )}
       </div>
     </section>

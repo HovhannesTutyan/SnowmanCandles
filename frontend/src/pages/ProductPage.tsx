@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
 import { fetchProduct, isNotFound } from '../api/client'
 import type { ProductDetail, ProductKind } from '../api/types'
@@ -9,21 +9,27 @@ import { ProductShowcase } from '../components/product/ProductShowcase'
 import { RelatedProducts } from '../components/product/RelatedProducts'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
 import { useSite } from '../context/site'
+import { useI18n } from '../i18n/context'
+import { Link } from '../i18n/Link'
+import type { Messages } from '../i18n/messages/en'
 import { useAsync } from '../hooks/useAsync'
 import { NotFoundPage } from './NotFoundPage'
 import styles from './ProductPage.module.css'
 
 export function ProductPage({ kind }: { kind: ProductKind }) {
   const { slug = '' } = useParams()
-  const product = useAsync(`${kind}/${slug}`, (signal) => fetchProduct(kind, slug, signal))
+  const { locale, t } = useI18n()
+  const product = useAsync(`${kind}/${slug}/${locale}`, (signal) =>
+    fetchProduct(kind, slug, locale, signal),
+  )
 
   if (product.status === 'loading') return <LoadingScreen variant="page" />
   if (product.status === 'error') {
     if (isNotFound(product.error)) {
       return (
         <NotFoundPage
-          title="We couldn't find that piece"
-          message="It may have been renamed or taken out of the shop."
+          title={t.status.productNotFoundTitle}
+          message={t.status.productNotFoundText}
         />
       )
     }
@@ -33,13 +39,13 @@ export function ProductPage({ kind }: { kind: ProductKind }) {
   return <ProductView key={`${kind}/${slug}`} product={product.data} />
 }
 
-function categoryLabel(product: ProductDetail): string {
-  if (product.product_type === 'collection') return 'Collections'
-  return product.product_type === 'set' ? 'Candle sets' : 'Single candles'
+function categoryLabel(product: ProductDetail, t: Messages): string {
+  return t.category[product.product_type]
 }
 
 function ProductView({ product }: { product: ProductDetail }) {
   const { content, formatPrice } = useSite()
+  const { t } = useI18n()
   const hasShowcase = product.showcase_views.length > 0
   // The showcase already shows the main image; the gallery stays for lit and extra photos.
   const showGallery = !hasShowcase || product.flame !== null || product.gallery.length > 0
@@ -50,10 +56,10 @@ function ProductView({ product }: { product: ProductDetail }) {
       <meta name="description" content={product.description} />
 
       <section className={styles.product}>
-        <nav aria-label="Breadcrumb" className={`${styles.breadcrumb} ${styles.rise}`}>
+        <nav aria-label={t.product.breadcrumb} className={`${styles.breadcrumb} ${styles.rise}`}>
           <ol>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/#shop">{categoryLabel(product)}</Link></li>
+            <li><Link to="/">{t.product.home}</Link></li>
+            <li><Link to="/#shop">{categoryLabel(product, t)}</Link></li>
             <li><span aria-current="page">{product.title}</span></li>
           </ol>
         </nav>

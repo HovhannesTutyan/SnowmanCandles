@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
-import { Link } from 'react-router'
 
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
 import { ArrowRightIcon } from '../icons'
 import styles from './ShopByType.module.css'
 
@@ -19,13 +20,14 @@ interface ShopByTypeProps {
 }
 
 export function ShopByType({ tiles }: ShopByTypeProps) {
+  const { t } = useI18n()
   return (
     <section id="shop" className={styles.section} aria-labelledby="shop-title">
       <div className={styles.inner}>
         <div className={`${styles.head} reveal`}>
-          <h2 id="shop-title" className={styles.title}>Shop by type</h2>
+          <h2 id="shop-title" className={styles.title}>{t.home.shopByType}</h2>
           <Link to="/decorate" className={styles.ideasLink}>
-            Styling ideas: decorate with candles
+            {t.home.stylingIdeas}
             <ArrowRightIcon />
           </Link>
         </div>

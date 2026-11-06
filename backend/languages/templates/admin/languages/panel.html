@@ -1,0 +1,25 @@
+<section class="lang-panel" aria-labelledby="lang-panel-title">
+  <div class="lang-panel-head">
+    <h2 id="lang-panel-title">Translations</h2>
+    <a href="{{ missing_url }}">{% if items_count %}See what's missing{% else %}Open the overview{% endif %} →</a>
+  </div>
+  {% if items_count %}
+    <ul class="lang-panel-counts">
+      {% for name, count in rows %}
+        <li class="{% if count %}is-missing{% else %}is-done{% endif %}">
+          <strong>{{ name }}</strong>
+          {% if count %}{{ count }} text{{ count|pluralize }} missing{% else %}all translated ✓{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="lang-panel-done">Every text has an Armenian and a Russian version ✓</p>
+  {% endif %}
+  <p class="lang-panel-note">
+    {% if provider %}
+      Automatic translation: on ({{ provider }}). Use the <em>Translate</em> buttons on any page, then check the drafts before saving.
+    {% else %}
+      Automatic translation: off. Type the translations under each English text, or turn on a translation service in <code>backend/.env</code> (see the README).
+    {% endif %}
+  </p>
+</section>

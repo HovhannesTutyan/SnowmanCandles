@@ -1,3 +1,4 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 
 DESIGN_IMAGE_HELP = "Optional. If empty, the picture from the original design is used."
@@ -32,8 +33,19 @@ class DecoratePage(models.Model):
         default="Browse the gallery",
         help_text="Link that scrolls to the gallery. Leave empty to hide it.",
     )
+    hero_video = models.FileField(
+        upload_to="decorate/video/",
+        blank=True,
+        validators=[FileExtensionValidator(["mp4", "webm", "mov"])],
+        help_text="Optional. Plays silently on a loop in place of the hero picture. Use an MP4 "
+        "(H.264): it plays in every browser (an iPhone .MOV may not play in Chrome). "
+        "Keep it short and under about 10 MB.",
+    )
     hero_image = models.ImageField(
-        upload_to="decorate/", blank=True, help_text=f"Tall picture (about 3:4). {DESIGN_IMAGE_HELP}"
+        upload_to="decorate/",
+        blank=True,
+        help_text="Tall picture (about 3:4). With a video, it's shown while the video loads "
+        f"(and to visitors who turn off animations). {DESIGN_IMAGE_HELP}",
     )
     hero_image_alt = models.CharField(
         "hero picture description",

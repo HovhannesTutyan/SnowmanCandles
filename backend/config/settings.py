@@ -18,6 +18,9 @@ env = environ.Env(
     CSRF_TRUSTED_ORIGINS=(list, []),
     BEHIND_PROXY=(bool, False),
     SERVE_MEDIA=(bool, False),
+    TRANSLATION_PROVIDER=(str, ""),
+    TRANSLATION_API_KEY=(str, ""),
+    TRANSLATION_MODEL=(str, ""),
 )
 environ.Env.read_env(BASE_DIR / ".env")
 
@@ -30,6 +33,9 @@ ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 # Application definition
 
 INSTALLED_APPS = [
+    # Before the admin: translated fields in admin forms, and the admin home page panel.
+    "modeltranslation",
+    "languages",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,6 +64,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # API responses in the language the site asks for (?lang=hy|en|ru).
+    "languages.middleware.ApiLanguageMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -101,11 +109,35 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
+#
+# Texts are written in English in the admin, with Armenian and Russian versions next to
+# them (django-modeltranslation adds a column per language). The website shows Armenian
+# by default; that is decided by the frontend's addresses, not here. The admin itself
+# stays in English.
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
+LANGUAGES = [
+    ("en", "English"),
+    ("hy", "Armenian"),
+    ("ru", "Russian"),
+]
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+# An empty Armenian or Russian text shows the English one instead.
+MODELTRANSLATION_FALLBACK_LANGUAGES = ("en",)
+# Slugs are made from the English title.
+MODELTRANSLATION_PREPOPULATE_LANGUAGE = "en"
+
+# The admin's "Translate" button. Off until a provider and key are set in .env:
+#   TRANSLATION_PROVIDER=claude (Anthropic API) or google (Google Cloud Translation)
+#   TRANSLATION_API_KEY=...
+#   TRANSLATION_MODEL=...  (optional, Claude only)
+TRANSLATION_PROVIDER = env("TRANSLATION_PROVIDER").strip().lower()
+TRANSLATION_API_KEY = env("TRANSLATION_API_KEY").strip()
+TRANSLATION_MODEL = env("TRANSLATION_MODEL").strip()
 
 
 # Static & media files

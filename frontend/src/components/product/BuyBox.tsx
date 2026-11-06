@@ -1,10 +1,11 @@
 import { useId, useState, type ReactNode } from 'react'
-import { Link } from 'react-router'
 
 import type { CollectionDetail, ProductDetail } from '../../api/types'
 import { useCart } from '../../context/cart'
 import { useSite } from '../../context/site'
 import { useFlash } from '../../hooks/useFlash'
+import { useI18n } from '../../i18n/context'
+import { Link } from '../../i18n/Link'
 import { itemKey, productPath } from '../../lib/items'
 import { Accordion, type AccordionItem } from './Accordion'
 import styles from './BuyBox.module.css'
@@ -25,6 +26,7 @@ function isCollection(product: ProductDetail): product is CollectionDetail {
 export function BuyBox({ product, wide = false }: BuyBoxProps) {
   const { content, formatPrice } = useSite()
   const { addItem } = useCart()
+  const { t } = useI18n()
   const [scent, setScent] = useState<string | null>(product.scents[0] ?? null)
   const [quantity, setQuantity] = useState(1)
   const [added, flashAdded] = useFlash(2200)
@@ -40,34 +42,33 @@ export function BuyBox({ product, wide = false }: BuyBoxProps) {
     flashAdded()
   }
 
-  const kicker = product.is_featured
-    ? `${product.product_type_label} · ${content.collection_eyebrow}`
-    : product.product_type_label
+  const typeLabel = t.productType[product.product_type]
+  const kicker = product.is_featured ? `${typeLabel} · ${content.collection_eyebrow}` : typeLabel
 
   const facts: { label: string; value: string; icon: ReactNode }[] = [
-    { label: 'Burn time', value: product.burn_time, icon: <BurnIcon /> },
-    { label: 'Size', value: product.size, icon: <SizeIcon /> },
-    { label: 'Ships in', value: content.ships_in, icon: <TruckIcon /> },
+    { label: t.product.burnTime, value: product.burn_time, icon: <BurnIcon /> },
+    { label: t.product.size, value: product.size, icon: <SizeIcon /> },
+    { label: t.product.shipsIn, value: content.ships_in, icon: <TruckIcon /> },
   ].filter((fact) => fact.value)
 
   // Panels with no text are left out.
   const accordion: AccordionItem[] = []
-  if (product.details) accordion.push({ title: 'Details', content: product.details })
+  if (product.details) accordion.push({ title: t.product.details, content: product.details })
   if (content.care_text) {
     accordion.push({
-      title: 'Candle care',
+      title: t.product.care,
       content: (
         <>
           {content.care_text}{' '}
           <Link to="/candle-care" className={styles.inlineLink}>
-            Read the full care guide
+            {t.product.careGuide}
           </Link>
         </>
       ),
     })
   }
   if (content.shipping_text) {
-    accordion.push({ title: 'Shipping & returns', content: content.shipping_text })
+    accordion.push({ title: t.product.shipping, content: content.shipping_text })
   }
 
   return (
@@ -85,10 +86,10 @@ export function BuyBox({ product, wide = false }: BuyBoxProps) {
             {content.price_note && <span className={styles.muted}>{content.price_note}</span>}
           </div>
           {soldOut ? (
-            <p className={`${styles.stock} ${styles.stockOut}`}>Sold out — back soon</p>
+            <p className={`${styles.stock} ${styles.stockOut}`}>{t.cart.soldOutBackSoon}</p>
           ) : (
             product.stock <= LOW_STOCK && (
-              <p className={styles.stock}>Only {product.stock} left</p>
+              <p className={styles.stock}>{t.cart.onlyLeft(product.stock)}</p>
             )
           )}
         </div>
@@ -98,7 +99,7 @@ export function BuyBox({ product, wide = false }: BuyBoxProps) {
         {product.scents.length > 0 && (
           <div className={styles.scents} role="group" aria-labelledby={scentLabelId}>
             <p id={scentLabelId} className={styles.legend}>
-              Scent: <span>{scent}</span>
+              {t.product.scent} <span>{scent}</span>
             </p>
             <div className={styles.pills}>
               {product.scents.map((name) => (
@@ -118,7 +119,7 @@ export function BuyBox({ product, wide = false }: BuyBoxProps) {
 
         {isCollection(product) && product.candles.length > 0 && (
           <div>
-            <p className={styles.legend}>Includes</p>
+            <p className={styles.legend}>{t.product.includes}</p>
             <ul className={styles.included}>
               {product.candles.map((candle) => (
                 <li key={candle.slug}>
@@ -138,16 +139,16 @@ export function BuyBox({ product, wide = false }: BuyBoxProps) {
           <div className={styles.stepper}>
             <button
               type="button"
-              aria-label="Decrease quantity"
+              aria-label={t.cart.decrease}
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               disabled={soldOut || quantity <= 1}
             >
               −
             </button>
-            <span aria-live="polite" aria-label={`Quantity ${quantity}`}>{quantity}</span>
+            <span aria-live="polite" aria-label={t.cart.quantity(quantity)}>{quantity}</span>
             <button
               type="button"
-              aria-label="Increase quantity"
+              aria-label={t.cart.increase}
               onClick={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
               disabled={soldOut || quantity >= maxQuantity}
             >
@@ -161,7 +162,7 @@ export function BuyBox({ product, wide = false }: BuyBoxProps) {
             disabled={soldOut}
           >
             {soldOut ? (
-              'Sold out'
+              t.cart.soldOut
             ) : added ? (
               // Keyed so the pop-in and tick animations replay on every add.
               <span key={addCount} className={styles.addedLabel}>
@@ -170,10 +171,10 @@ export function BuyBox({ product, wide = false }: BuyBoxProps) {
                   <path className={styles.check} d="M7 12.5l3.2 3.2L17 9" stroke="#FFFFFF"
                     strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                Added to cart
+                {t.cart.addedToCart}
               </span>
             ) : (
-              'Add to cart'
+              t.cart.add
             )}
           </button>
         </div>

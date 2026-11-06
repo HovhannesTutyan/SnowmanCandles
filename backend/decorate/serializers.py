@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from languages.conf import localized_field_names
+
 from shop.models import Candle
 
 from .models import DecoratePage, GalleryImage
@@ -26,4 +28,5 @@ class DecoratePageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DecoratePage
-        exclude = ["id", "updated_at"]
+        # Translated fields once, in the requested language.
+        exclude = ["id", "updated_at", *localized_field_names(DecoratePage)]

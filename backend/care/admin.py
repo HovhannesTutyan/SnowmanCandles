@@ -4,10 +4,12 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
 
+from languages.admin import TranslatedAdmin, TranslatedStackedInline
+
 from .models import FAQ, CarePage, CareRitual, CareTip, FragranceTip
 
 
-class ItemInline(admin.StackedInline):
+class ItemInline(TranslatedStackedInline):
     extra = 0
     classes = ["collapse"]
 
@@ -19,28 +21,28 @@ class ItemInline(admin.StackedInline):
 
 class CareTipInline(ItemInline):
     model = CareTip
-    fields = [("title", "order"), "text"]
+    fields = ["title", "text", "order"]
     verbose_name = "tip"
     verbose_name_plural = "Tips (numbered 01, 02, … in this order)"
 
 
 class CareRitualInline(ItemInline):
     model = CareRitual
-    fields = [("title", "order"), "text"]
+    fields = ["title", "text", "order"]
     verbose_name = "care ritual"
     verbose_name_plural = "Care rituals"
 
 
 class FragranceTipInline(ItemInline):
     model = FragranceTip
-    fields = [("lead", "order"), "text"]
+    fields = ["lead", "text", "order"]
     verbose_name = "fragrance point"
     verbose_name_plural = "Fragrance points"
 
 
 class FAQInline(ItemInline):
     model = FAQ
-    fields = [("question", "order"), "answer"]
+    fields = ["question", "answer", "order"]
     verbose_name = "question"
     verbose_name_plural = "FAQs"
 
@@ -55,7 +57,7 @@ def photo_preview(image):
 
 
 @admin.register(CarePage)
-class CarePageAdmin(admin.ModelAdmin):
+class CarePageAdmin(TranslatedAdmin):
     """A single page: the list view jumps straight to the form; lists are edited inline."""
 
     autocomplete_fields = ["fragrance_product"]

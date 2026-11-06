@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 
 import { useActiveSection } from '../../hooks/useActiveSection'
+import { useI18n } from '../../i18n/context'
 import styles from './SectionNav.module.css'
 
 interface SectionNavProps {
@@ -10,11 +11,12 @@ interface SectionNavProps {
 }
 
 /** The floating bar at the bottom of a long page for jumping between its sections. */
-export function SectionNav({ title, links, label = 'On this page' }: SectionNavProps) {
+export function SectionNav({ title, links, label }: SectionNavProps) {
+  const { t } = useI18n()
   const active = useActiveSection(links.map((link) => link.id))
 
   return (
-    <nav aria-label={label} className={styles.nav}>
+    <nav aria-label={label ?? t.sectionNav.onThisPage} className={styles.nav}>
       <a href="#top" className={styles.title}>{title}</a>
       <div className={styles.links}>
         {links.map((link, index) => (

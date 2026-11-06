@@ -4,6 +4,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
 
+from languages.admin import TranslatedAdmin
+
 from .models import CONTENT_IMAGE_FIELDS, LINK_HELP, HeroSlide, HomePageContent
 
 
@@ -19,7 +21,7 @@ def image_preview_html(image, max_height=160):
 
 
 @admin.register(HomePageContent)
-class HomePageContentAdmin(admin.ModelAdmin):
+class HomePageContentAdmin(TranslatedAdmin):
     """Site-wide texts and images. A single page: the list view jumps straight to the form."""
 
     readonly_fields = [f"{name}_preview" for name in CONTENT_IMAGE_FIELDS] + ["updated_at"]
@@ -98,8 +100,8 @@ for _name in CONTENT_IMAGE_FIELDS:
 
 
 @admin.register(HeroSlide)
-class HeroSlideAdmin(admin.ModelAdmin):
-    list_display = ["thumbnail", "title", "linked_item", "order", "is_active"]
+class HeroSlideAdmin(TranslatedAdmin):
+    list_display = ["thumbnail", "title", "linked_item", "order", "is_active", "translation_status"]
     list_display_links = ["thumbnail", "title"]
     list_editable = ["order", "is_active"]
     list_filter = ["is_active"]

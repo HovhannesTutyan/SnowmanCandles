@@ -54,7 +54,7 @@ describe('CareTipsPage', () => {
     // The featured candle label links to its product page, with its price.
     expect(screen.getByRole('link', { name: 'Holly Bauble Candle · $24.00' })).toHaveAttribute(
       'href',
-      '/candles/holly-bauble-candle',
+      '/en/candles/holly-bauble-candle',
     )
   })
 
@@ -107,14 +107,14 @@ describe('CareTipsPage', () => {
     await screen.findByRole('heading', { level: 1 })
 
     const header = screen.getByRole('banner')
-    expect(within(header).getByRole('link', { name: 'Candle care' })).toHaveAttribute('href', '/candle-care')
+    expect(within(header).getByRole('link', { name: 'Candle care' })).toHaveAttribute('href', '/en/candle-care')
     const footer = screen.getByRole('contentinfo')
-    expect(within(footer).getByRole('link', { name: 'Candle care & tips' })).toHaveAttribute('href', '/candle-care')
+    expect(within(footer).getByRole('link', { name: 'Candle care & tips' })).toHaveAttribute('href', '/en/candle-care')
 
     const howItsMade = screen.getByRole('region', { name: 'Every piece starts out white.' })
     fireEvent.click(within(howItsMade).getByRole('link', { name: 'Candle care & tips' }))
     expect(await screen.findByRole('heading', { level: 1, name: /perfect burn/ })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/candle-care')
+    expect(router.state.location.pathname).toBe('/en/candle-care')
     expect(within(screen.getByRole('banner')).getByRole('link', { name: 'Candle care' })).toHaveAttribute(
       'aria-current',
       'page',
@@ -126,6 +126,6 @@ describe('CareTipsPage', () => {
     renderApp('/candles/vintage-roadster-candle')
     await screen.findByRole('heading', { level: 1 })
     fireEvent.click(screen.getByRole('button', { name: 'Candle care' }))
-    expect(screen.getByRole('link', { name: 'Read the full care guide' })).toHaveAttribute('href', '/candle-care')
+    expect(screen.getByRole('link', { name: 'Read the full care guide' })).toHaveAttribute('href', '/en/candle-care')
   })
 })

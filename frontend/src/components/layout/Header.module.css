@@ -158,3 +158,26 @@
     font-size: 17px;
   }
 }
+
+/* Small phones: tighter buttons so the studio name still fits next to the language menu. */
+@media (max-width: 420px) {
+  .inner {
+    gap: 8px;
+  }
+
+  .logo {
+    gap: 8px;
+  }
+
+  .logoText {
+    font-size: 19px;
+  }
+
+  .actions {
+    gap: 2px;
+  }
+
+  .iconButton {
+    width: 40px;
+  }
+}

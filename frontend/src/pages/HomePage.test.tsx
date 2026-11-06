@@ -43,16 +43,16 @@ describe('HomePage', () => {
     const grid = await screen.findByRole('region', { name: /Painted for the season/ })
     expect(within(grid).getByRole('link', { name: 'Holly Bauble Candle' })).toHaveAttribute(
       'href',
-      '/candles/holly-bauble-candle',
+      '/en/candles/holly-bauble-candle',
     )
     expect(within(grid).getByRole('link', { name: 'Winter Set' })).toHaveAttribute(
       'href',
-      '/collections/winter-set',
+      '/en/collections/winter-set',
     )
     // The hero caption links to the slide's product.
     expect(screen.getByRole('link', { name: 'Snowmen by the Campfire' })).toHaveAttribute(
       'href',
-      '/candles/snowmen',
+      '/en/candles/snowmen',
     )
   })
 
@@ -75,7 +75,7 @@ describe('HomePage', () => {
       'Single candles',
       'Candle sets',
     ])
-    expect(within(section).getByRole('link', { name: /decorate with candles/ })).toHaveAttribute('href', '/decorate')
+    expect(within(section).getByRole('link', { name: /decorate with candles/ })).toHaveAttribute('href', '/en/decorate')
   })
 
   it('shows an empty state when nothing is featured', async () => {

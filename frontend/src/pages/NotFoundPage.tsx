@@ -1,6 +1,7 @@
-import { Link } from 'react-router'
 
 import { MessageScreen } from '../components/StatusScreen'
+import { useI18n } from '../i18n/context'
+import { Link } from '../i18n/Link'
 import styles from './NotFoundPage.module.css'
 
 interface NotFoundPageProps {
@@ -8,22 +9,21 @@ interface NotFoundPageProps {
   message?: string
 }
 
-export function NotFoundPage({
-  title = "This page doesn't exist",
-  message = 'The link may be old, or the address mistyped.',
-}: NotFoundPageProps) {
+export function NotFoundPage({ title, message }: NotFoundPageProps) {
+  const { t } = useI18n()
+  const heading = title ?? t.status.notFoundTitle
   return (
     <>
-      <title>{title}</title>
+      <title>{heading}</title>
       <MessageScreen
-        title={title}
+        title={heading}
         action={
           <Link to="/#winter" className={styles.button}>
-            Browse the collection
+            {t.status.browse}
           </Link>
         }
       >
-        {message}
+        {message ?? t.status.notFoundText}
       </MessageScreen>
     </>
   )

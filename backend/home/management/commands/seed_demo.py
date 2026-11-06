@@ -8,6 +8,7 @@ from django.db import transaction
 from care.models import CarePage
 from decorate.models import DecoratePage, GalleryImage
 from home.models import HeroSlide, HomePageContent
+from languages.catalog import fill_all_from_catalog
 from shop.models import Candle, CandleShowcaseView, ProductType, Scent
 
 DEMO_IMAGES = Path(__file__).resolve().parents[2] / "demo_images"
@@ -250,6 +251,12 @@ class Command(BaseCommand):
             care_page.save(update_fields=["fragrance_product", "updated_at"])
 
         self._seed_decorate_gallery()
+        self._seed_decorate_video()
+
+        # Armenian and Russian versions of the demo texts (empty translations only).
+        filled = fill_all_from_catalog()
+        if filled:
+            self.stdout.write(self.style.SUCCESS(f"  translated {filled} item(s) into Armenian and Russian"))
 
         self.stdout.write(self.style.SUCCESS("Demo content ready."))
 
@@ -287,6 +294,19 @@ class Command(BaseCommand):
                 room.picture = by_file[filename]
                 room.save(update_fields=["picture"])
         self.stdout.write(self.style.SUCCESS(f"  created  {len(DEMO_GALLERY)} gallery pictures"))
+
+    def _seed_decorate_video(self):
+        """The decorate page hero video (and its first frame as the picture), if none yet."""
+        page = DecoratePage.load()
+        if page.hero_video:
+            return
+        with open(DEMO_IMAGES / "decorate" / "hero-video.mp4", "rb") as fh:
+            page.hero_video.save("hero-video.mp4", File(fh), save=False)
+        if not page.hero_image:
+            with open(DEMO_IMAGES / "decorate" / "hero-video-poster.jpg", "rb") as fh:
+                page.hero_image.save("hero-video-poster.jpg", File(fh), save=False)
+        page.save()
+        self.stdout.write(self.style.SUCCESS("  added    decorate page hero video"))
 
     def _seed_showcase(self, candle):
         """Add the demo showcase views to a product that has none yet."""

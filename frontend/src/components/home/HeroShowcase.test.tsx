@@ -10,7 +10,7 @@ import { HeroShowcase, SLIDE_DURATION_MS } from './HeroShowcase'
 
 const slides = [
   makeSlide({ id: 1, title: 'Snowmen' }),
-  makeSlide({ id: 2, title: 'Roadster', link: { type: 'candle', slug: 'roadster', price: '28.00', product_type_label: 'Single candle' } }),
+  makeSlide({ id: 2, title: 'Roadster', link: { type: 'candle', slug: 'roadster', price: '28.00', product_type: 'candle', product_type_label: 'Single candle' } }),
   makeSlide({ id: 3, title: 'Carousel', subtitle: 'Limited edition', link: null }),
 ]
 

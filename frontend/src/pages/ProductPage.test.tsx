@@ -31,7 +31,7 @@ describe('ProductPage', () => {
     expect(screen.getByRole('heading', { name: 'Hours of small brushstrokes in every one.' })).toBeInTheDocument()
 
     // Related products link to their pages.
-    expect(screen.getByRole('link', { name: /Carousel Candle/ })).toHaveAttribute('href', '/candles/carousel-candle')
+    expect(screen.getByRole('link', { name: /Carousel Candle/ })).toHaveAttribute('href', '/en/candles/carousel-candle')
   })
 
   it('has a gallery with main, lit and uploaded views', async () => {
@@ -158,7 +158,7 @@ describe('ProductPage', () => {
     mockApi({ '/api/site/': makeContent() }) // the detail request 404s
     renderApp('/candles/does-not-exist')
     expect(await screen.findByRole('heading', { name: "We couldn't find that piece" })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Browse the collection' })).toHaveAttribute('href', '/#winter')
+    expect(screen.getByRole('link', { name: 'Browse the collection' })).toHaveAttribute('href', '/en#winter')
   })
 
   it('opens from a homepage card and moves between related products', async () => {
@@ -179,7 +179,7 @@ describe('ProductPage', () => {
     const grid = await screen.findByRole('region', { name: /Painted for the season/ })
     fireEvent.click(within(grid).getByRole('link', { name: 'Vintage Roadster Candle' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Vintage Roadster Candle' })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/candles/vintage-roadster-candle')
+    expect(router.state.location.pathname).toBe('/en/candles/vintage-roadster-candle')
 
     fireEvent.click(screen.getByRole('link', { name: /Carousel Candle/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Carousel Candle' })).toBeInTheDocument()
@@ -206,7 +206,7 @@ describe('ProductPage', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Winter Set' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Holly Bauble Candle' })).toHaveAttribute(
       'href',
-      '/candles/holly-bauble-candle',
+      '/en/candles/holly-bauble-candle',
     )
   })
 })

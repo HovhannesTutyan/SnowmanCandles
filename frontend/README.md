@@ -57,13 +57,16 @@ Copy `.env.example` to `.env` to override settings.
 ```
 src/
   main.tsx        Providers + router
-  router.tsx      Routes
+  router.tsx      Routes, repeated for each language: "/" (Armenian), "/en/…", "/ru/…"
+  i18n/           Languages: locales.ts (prefixes, names), messages/en|hy|ru.ts (interface
+                  texts), context.ts (useI18n), LocaleRoot, Link (keeps the language)
   api/            Typed API client (client.ts) and response types (types.ts)
   context/        Site content (useSite) and cart (useCart) contexts + providers
   hooks/          useAsync (loading / error / retry), useFlash, useMediaQuery, usePrefersReducedMotion
   lib/            Price formatting, product URLs/keys, design image fallbacks, helpers
   components/
-    layout/       SiteLayout (loads site content), Ticker, Header (menu, cart badge), Footer
+    layout/       SiteLayout (loads site content), Ticker, Header (menu, cart badge),
+                  LanguageSwitcher, Footer
     home/         Hero, HeroShowcase (carousel), ProductTrain, CollectionGrid,
                   ProductCard, HowItsMade, ShopByType, CustomBand, Newsletter, Snowfall
     product/      ProductShowcase (animated viewer), ProductGallery, Flame, BuyBox, Accordion,
@@ -97,6 +100,23 @@ Each component has its own CSS Module with the exact colours, sizes and spacing 
 | Ingredients page: chapters (banner, text, points, questions, cards, swatches) | **Ingredients → Chapters** |
 | Decorate page: hero, story, room cards, gallery heading, closing section | **Decorate → Decorate page** |
 | Decorate page: gallery pictures (and the candles shown in each) | **Decorate → Gallery images** |
+
+## Languages
+
+Armenian is the default at `/`; English is under `/en/` and Russian under `/ru/` (the same
+pages: `/candle-care`, `/en/candle-care`, `/ru/candle-care`). The header's language menu opens
+the current page in another language.
+
+- **Texts from the admin** come from the API in the page's language (`?lang=hy|en|ru`).
+- **Texts in the code** (buttons, menus, labels, page titles) are in
+  `src/i18n/messages/en.ts`, `hy.ts` and `ru.ts`. Add a text to `en.ts` first: TypeScript then
+  points to the other two until they have it too.
+- In components, use `const { t } = useI18n()` for texts, and `Link` from `src/i18n/Link`
+  (not from `react-router`) so links stay in the current language.
+- Fonts: the design fonts have no Armenian or Cyrillic letters. Cyrillic comes from Onest
+  (Google Fonts); Armenian from Noto Sans Armenian, bundled in `src/assets/fonts/` and set
+  to 85% size (`size-adjust` in `styles/global.css`) because Armenian words run wider. Change
+  that one number to make all Armenian text bigger or smaller.
 
 ## Notes
 

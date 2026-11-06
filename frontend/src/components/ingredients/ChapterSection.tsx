@@ -1,4 +1,5 @@
 import type { IngredientChapter } from '../../api/types'
+import { useI18n } from '../../i18n/context'
 import { CardIcon } from './CardIcon'
 import styles from './ChapterSection.module.css'
 import { Disclosure } from './Disclosure'
@@ -12,6 +13,7 @@ interface ChapterSectionProps {
 
 /** One ingredient: a big banner, then text with points, questions, cards and swatches. */
 export function ChapterSection({ chapter, openFirstQuestion = false }: ChapterSectionProps) {
+  const { t } = useI18n()
   const titleId = `${chapter.anchor}-title`
   const hasQuestions = chapter.questions.length > 0
 
@@ -98,7 +100,7 @@ export function ChapterSection({ chapter, openFirstQuestion = false }: ChapterSe
         )}
 
         {chapter.swatches.length > 0 && (
-          <ul className={styles.swatches} aria-label={`${chapter.title} palette`}>
+          <ul className={styles.swatches} aria-label={t.ingredients.palette(chapter.title)}>
             {chapter.swatches.map((swatch, index) => (
               <li key={`${index}-${swatch.name}`} className={styles.swatch}>
                 <span className={styles.swatchColor} style={{ background: swatch.color }} aria-hidden="true" />

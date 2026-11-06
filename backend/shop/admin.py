@@ -4,6 +4,8 @@ from django.db.models import Count
 from django.utils import timezone
 from django.utils.html import format_html
 
+from languages.admin import TranslatedAdmin, TranslatedStackedInline
+
 from .models import (
     LOW_STOCK_THRESHOLD,
     Candle,
@@ -29,8 +31,8 @@ LIT_VIEW_FIELDSET = (
 )
 
 
-class GalleryInline(admin.TabularInline):
-    fields = ["image", "preview", "label", "order"]
+class GalleryInline(TranslatedStackedInline):
+    fields = [("image", "preview"), "label", "order"]
     readonly_fields = ["preview"]
     extra = 0
     verbose_name = "extra photo"
@@ -45,10 +47,11 @@ class GalleryInline(admin.TabularInline):
         )
 
 
-class ShowcaseViewInline(admin.StackedInline):
+class ShowcaseViewInline(TranslatedStackedInline):
     fields = [
         ("image", "preview"),
-        ("label", "short_label"),
+        "label",
+        "short_label",
         "caption",
         ("color", "tint"),
         ("group", "order"),
@@ -94,8 +97,8 @@ class CollectionImageInline(GalleryInline):
 
 
 @admin.register(Scent)
-class ScentAdmin(admin.ModelAdmin):
-    list_display = ["name", "order"]
+class ScentAdmin(TranslatedAdmin):
+    list_display = ["name", "translation_status", "order"]
     list_editable = ["order"]
     search_fields = ["name"]
 
@@ -122,10 +125,10 @@ class AvailabilityFilter(admin.SimpleListFilter):
         return queryset
 
 
-class BaseItemAdmin(admin.ModelAdmin):
+class BaseItemAdmin(TranslatedAdmin):
     list_display = [
-        "thumbnail", "title", "price", "stock", "availability",
-        "is_featured", "featured_order", "created_at",
+        "thumbnail", "title", "price", "stock", "availability", "translation_status",
+        "is_featured", "featured_order",
     ]
     list_display_links = ["thumbnail", "title"]
     list_editable = ["price", "stock", "is_featured", "featured_order"]
@@ -217,7 +220,7 @@ class BaseItemAdmin(admin.ModelAdmin):
 class CandleAdmin(BaseItemAdmin):
     list_display = [
         "thumbnail", "title", "product_type", "price", "stock", "availability",
-        "is_featured", "featured_order", "created_at",
+        "translation_status", "is_featured", "featured_order",
     ]
     list_filter = [AvailabilityFilter, "product_type", "is_featured", "created_at"]
     fieldsets = [
@@ -237,7 +240,7 @@ class CandleAdmin(BaseItemAdmin):
 class CollectionAdmin(BaseItemAdmin):
     list_display = [
         "thumbnail", "title", "price", "stock", "availability", "candle_count",
-        "is_featured", "featured_order", "created_at",
+        "translation_status", "is_featured", "featured_order",
     ]
     filter_horizontal = ["candles", "scents"]
     inlines = [CollectionShowcaseViewInline, CollectionImageInline]

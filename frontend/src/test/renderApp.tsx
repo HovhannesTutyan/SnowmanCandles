@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router/dom'
 import { vi } from 'vitest'
 
 import { CartProvider } from '../context/CartProvider'
+import { localizePath, type Locale } from '../i18n/locales'
 import { routes } from '../router'
 
 type Responses = Record<string, unknown>
@@ -25,8 +26,11 @@ export function mockApi(responses: Responses) {
   })
 }
 
-/** Renders the whole app (layout, routes, cart) at `path`. */
-export function renderApp(path: string) {
-  const router = createMemoryRouter(routes, { initialEntries: [path] })
+/**
+ * Renders the whole app (layout, routes, cart) at `path`, in English unless another
+ * language is given ("/candle-care" opens "/en/candle-care").
+ */
+export function renderApp(path: string, locale: Locale = 'en') {
+  const router = createMemoryRouter(routes, { initialEntries: [localizePath(path, locale)] })
   return { router, ...render(<CartProvider><RouterProvider router={router} /></CartProvider>) }
 }

@@ -1,0 +1,379 @@
+/* Translation helpers for admin forms (see admin.js). Uses the admin's own colour
+   variables, so light and dark mode both work. */
+
+:root {
+  --lang-warn: #b26a00;
+  --lang-warn-bg: #fff4e0;
+  --lang-draft: #1f6fb2;
+  --lang-draft-bg: #eaf3fb;
+  --lang-done: #2e7d32;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --lang-warn: #f0b35a;
+    --lang-warn-bg: #3a2c12;
+    --lang-draft: #7cb8ec;
+    --lang-draft-bg: #15283a;
+    --lang-done: #7fc683;
+  }
+}
+
+:root[data-theme="dark"] {
+  --lang-warn: #f0b35a;
+  --lang-warn-bg: #3a2c12;
+  --lang-draft: #7cb8ec;
+  --lang-draft-bg: #15283a;
+  --lang-done: #7fc683;
+}
+
+/* ---------- one group per translated field ---------- */
+
+.lang-group {
+  margin: 10px 0;
+  border: 1px solid var(--hairline-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--body-bg);
+}
+
+.lang-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 10px;
+  background: var(--darkened-bg);
+  border-bottom: 1px solid var(--hairline-color);
+}
+
+.lang-group-name {
+  font-weight: 600;
+  color: var(--body-loud-color);
+}
+
+.lang-group .form-row.lang-row {
+  border-bottom: 1px solid var(--hairline-color);
+  padding: 8px 10px;
+}
+
+.lang-group .form-row.lang-row:last-child {
+  border-bottom: 0;
+}
+
+/* More specific than the admin's ".aligned label", which loads after this file. */
+.lang-group .form-row.lang-row label {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  font-weight: normal;
+}
+
+.lang-group textarea {
+  min-height: 0;
+}
+
+.lang-badge {
+  display: inline-block;
+  min-width: 28px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--primary);
+  color: var(--primary-fg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.lang-row-hy .lang-badge,
+.lang-row-ru .lang-badge {
+  background: var(--secondary);
+}
+
+.lang-required {
+  color: var(--body-quiet-color);
+  font-size: 11px;
+}
+
+/* An Armenian or Russian box that is still empty. */
+.lang-row.lang-missing {
+  background: var(--lang-warn-bg);
+}
+
+/* Filled in by "Translate", not yet edited or saved. */
+.lang-row.lang-draft {
+  background: var(--lang-draft-bg);
+}
+
+/* The note next to an Armenian or Russian box ("Missing…" / "Draft…"). */
+.lang-flag {
+  display: none;
+  align-self: center;
+  margin-left: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lang-row.lang-missing .lang-flag,
+.lang-row.lang-draft .lang-flag {
+  display: inline-block;
+}
+
+.lang-row.lang-missing .lang-flag {
+  color: var(--lang-warn);
+}
+
+.lang-row.lang-draft .lang-flag {
+  color: var(--lang-draft);
+}
+
+/* ---------- buttons ---------- */
+
+.lang-translate-one,
+.lang-translate-all,
+.lang-filter-option {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--body-bg);
+  color: var(--body-fg);
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.lang-translate-one:hover:not(:disabled),
+.lang-filter-option:hover {
+  border-color: var(--primary);
+}
+
+.lang-translate-all {
+  background: var(--button-bg);
+  border-color: var(--button-bg);
+  color: var(--button-fg);
+  font-weight: 600;
+  padding: 7px 14px;
+}
+
+.lang-translate-all:hover:not(:disabled) {
+  background: var(--button-hover-bg);
+}
+
+.lang-translate-one:disabled,
+.lang-translate-all:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lang-busy {
+  cursor: progress;
+}
+
+/* ---------- toolbar at the top of the form ---------- */
+
+.lang-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  align-items: center;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--hairline-color);
+  border-radius: 8px;
+  background: var(--body-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.lang-toolbar-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+}
+
+.lang-count {
+  color: var(--lang-done);
+}
+
+.lang-count.is-missing {
+  color: var(--lang-warn);
+  font-weight: 600;
+}
+
+.lang-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.lang-filter {
+  display: inline-flex;
+  gap: 0;
+}
+
+.lang-filter-option {
+  border-radius: 0;
+  margin-left: -1px;
+}
+
+.lang-filter-option:first-child {
+  border-radius: 6px 0 0 6px;
+  margin-left: 0;
+}
+
+.lang-filter-option:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.lang-filter-option[aria-pressed="true"] {
+  position: relative;
+  background: var(--selected-bg);
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.lang-toolbar-message {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+  color: var(--body-quiet-color);
+  font-size: 12px;
+}
+
+.lang-toolbar-message.is-error {
+  color: var(--error-fg, #ba2121);
+  font-weight: 600;
+}
+
+/* Language filter: hide the other translation rows (English always stays as a reference). */
+body[data-lang-filter="en"] .lang-row-hy,
+body[data-lang-filter="en"] .lang-row-ru,
+body[data-lang-filter="hy"] .lang-row-ru,
+body[data-lang-filter="ru"] .lang-row-hy {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .lang-toolbar {
+    position: static;
+    grid-template-columns: 1fr;
+  }
+
+  .lang-toolbar-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- lists, home page panel and overview page ---------- */
+
+.lang-status {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.lang-status.is-done {
+  color: var(--lang-done);
+}
+
+.lang-status.is-missing {
+  color: var(--lang-warn);
+}
+
+.lang-panel {
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--hairline-color);
+  border-radius: 8px;
+  background: var(--darkened-bg);
+  max-width: 760px;
+}
+
+.lang-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.lang-panel h2 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--body-loud-color);
+  background: none;
+  padding: 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.lang-panel-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lang-panel-counts li {
+  list-style: none;
+  padding: 0;
+}
+
+.lang-panel-counts .is-missing {
+  color: var(--lang-warn);
+}
+
+.lang-panel-counts .is-done,
+.lang-panel-done {
+  color: var(--lang-done);
+}
+
+.lang-panel-done {
+  margin: 10px 0 0;
+  font-weight: 600;
+}
+
+.lang-panel-note {
+  margin: 10px 0 0;
+  color: var(--body-quiet-color);
+  font-size: 12px;
+}
+
+.lang-missing-intro {
+  max-width: 760px;
+  margin: 0 0 12px;
+}
+
+.lang-missing-page .lang-panel-counts {
+  margin: 0 0 16px;
+}
+
+.lang-missing-table {
+  width: 100%;
+  max-width: 960px;
+}
+
+.lang-missing-table .num {
+  text-align: center;
+  width: 90px;
+}
+
+.lang-missing-table td.is-missing {
+  color: var(--lang-warn);
+  font-weight: 700;
+}
+
+.lang-missing-table td.is-done {
+  color: var(--lang-done);
+}

@@ -11,6 +11,7 @@ import {
 import type { ShowcaseView } from '../../api/types'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useI18n } from '../../i18n/context'
 import styles from './ProductShowcase.module.css'
 
 /*
@@ -60,6 +61,7 @@ export function ProductShowcase({
   const [panning, setPanning] = useState(false)
   const reducedMotion = usePrefersReducedMotion()
   const phone = useMediaQuery('(max-width: 640px)')
+  const { t } = useI18n()
 
   const drag = useRef<Drag | null>(null)
   const moveTimer = useRef<number | undefined>(undefined)
@@ -250,7 +252,7 @@ export function ProductShowcase({
       style={sceneStyle}
       tabIndex={0}
       role="region"
-      aria-roledescription="product viewer"
+      aria-roledescription={t.product.viewer}
       aria-label={title}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -264,7 +266,7 @@ export function ProductShowcase({
       <div className={styles.head}>
         <div className={styles.title}>{title}</div>
         <div className={`${styles.hint} ${touched ? styles.hintHidden : ''}`} aria-hidden="true">
-          {count > 1 ? 'Drag to turn · Click to zoom' : 'Click to zoom'}
+          {count > 1 ? t.product.hintDrag : t.product.hintClick}
         </div>
       </div>
 
@@ -293,14 +295,14 @@ export function ProductShowcase({
             style={itemStyle(index)}
             aria-hidden={index !== active}
           >
-            <img src={item.image} alt={`${title} — ${item.label}`} draggable={false} decoding="async" />
+            <img src={item.image} alt={t.product.viewAlt(title, item.label)} draggable={false} decoding="async" />
           </div>
         ))}
       </div>
 
       {count > 1 && (
         <div className={styles.nav}>
-          <button type="button" className={styles.arrow} aria-label="Previous view" onClick={() => go(active - 1, true)}>
+          <button type="button" className={styles.arrow} aria-label={t.product.previousView} onClick={() => go(active - 1, true)}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"
               strokeLinejoin="round" aria-hidden="true">
               <path d="M15 6l-6 6 6 6" />
@@ -319,7 +321,7 @@ export function ProductShowcase({
               </button>
             ))}
           </div>
-          <button type="button" className={styles.arrow} aria-label="Next view" onClick={() => go(active + 1, true)}>
+          <button type="button" className={styles.arrow} aria-label={t.product.nextView} onClick={() => go(active + 1, true)}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"
               strokeLinejoin="round" aria-hidden="true">
               <path d="M9 6l6 6-6 6" />
