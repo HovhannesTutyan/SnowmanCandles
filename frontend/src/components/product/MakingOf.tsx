@@ -35,7 +35,7 @@ export function MakingOf({ product }: { product: ProductDetail }) {
             <div className={styles.piece}>
               <img
                 src={product.image}
-                alt={product.flame ? t.product.glowingAlt(product.title) : ''}
+                alt={product.flame ? t.product.glowingAlt(product.title) : product.title}
                 loading="lazy"
               />
               {product.flame && <Flame x={product.flame.x} y={product.flame.y} />}

@@ -40,7 +40,7 @@ export function ChapterSection({ chapter, openFirstQuestion = false }: ChapterSe
       >
         <div className={styles.art} aria-hidden="true">
           {chapter.banner_image ? (
-            <img className={styles.photo} src={chapter.banner_image} alt="" />
+            <img className={styles.photo} src={chapter.banner_image} alt={chapter.title} />
           ) : (
             <ChapterArt kind={chapter.illustration} colors={chapter.swatches.map((s) => s.color)} />
           )}

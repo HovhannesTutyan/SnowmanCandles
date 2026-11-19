@@ -23,7 +23,7 @@ DEFAULT_CLAUDE_MODEL = "claude-opus-5-5"
 TIMEOUT_SECONDS = 120
 
 CLAUDE_INSTRUCTIONS = """\
-You translate website texts for Celeb Candles, a small studio that makes hand-cast, \
+You translate website texts for HugCrafts, a small studio that makes hand-cast, \
 hand-painted plaster pieces filled with soy wax candles: single candles and candle sets.
 
 Translate each English text into {language}. Write natural, warm shop copy that a native \
@@ -35,7 +35,7 @@ Rules:
 - Keep line breaks, blank lines and **double-asterisk** bold markers exactly where they are.
 - Keep numbers, sizes, prices, emails and links as they are; translate unit words such as \
 "hours" or "cm".
-- Do not translate the brand name "Celeb Candles".
+- Do not translate the brand name "HugCrafts".
 - Return one translation per input text, in the same order."""
 
 

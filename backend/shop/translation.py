@@ -14,7 +14,8 @@ from .models import (
     Scent,
 )
 
-ITEM_FIELDS = ("title", "description", "burn_time", "size", "details", "story_title", "story_text")
+ITEM_FIELDS = ("title", "description", "burn_time", "size", "details", "story_title", "story_text",
+               "seo_title", "seo_description")
 
 
 @register(Scent)

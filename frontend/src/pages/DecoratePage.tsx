@@ -9,6 +9,7 @@ import { GallerySlider } from '../components/decorate/GallerySlider'
 import { Lightbox } from '../components/decorate/Lightbox'
 import { ArrowRightIcon } from '../components/icons'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
+import { PageHead } from '../components/layout/PageHead'
 import { useSite } from '../context/site'
 import { useI18n } from '../i18n/context'
 import { Link } from '../i18n/Link'
@@ -37,8 +38,7 @@ function DecorateView({ page }: { page: DecoratePageData }) {
 
   return (
     <div id="top" className={styles.page}>
-      <title>{`${t.decorate.pageTitle} — ${content.studio_name}`}</title>
-      <meta name="description" content={t.decorate.description} />
+      <PageHead title={`${t.decorate.pageTitle} — ${content.studio_name}`} description={t.decorate.description} />
       {/* Dark top that fades into the cream page, as in the design. */}
       <div className={styles.backdrop} aria-hidden="true" />
 

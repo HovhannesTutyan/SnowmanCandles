@@ -111,6 +111,22 @@ class BaseItem(models.Model):
         "Measured on the main image: 0 = left/bottom edge, 100 = right/top edge.",
     )
 
+    # Search engines
+    seo_title = models.CharField(
+        "search title",
+        max_length=120,
+        blank=True,
+        help_text="Shown as the link in Google results. About 60 characters. "
+        "Leave empty to use the text shown in grey (title — shop name).",
+    )
+    seo_description = models.TextField(
+        "search description",
+        max_length=320,
+        blank=True,
+        help_text="Shown under the link in Google results and in shared links. About 150 "
+        "characters. Leave empty to use the start of the description.",
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -10,6 +10,7 @@ import { HowItsMade } from '../components/home/HowItsMade'
 import { Newsletter } from '../components/home/Newsletter'
 import { ShopByType, type TypeTile } from '../components/home/ShopByType'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
+import { PageHead } from '../components/layout/PageHead'
 import { useSite } from '../context/site'
 import { useI18n } from '../i18n/context'
 import { useAsync } from '../hooks/useAsync'
@@ -68,8 +69,7 @@ function HomeView({ data }: { data: HomeData }) {
 
   return (
     <>
-      {/* React 19 hoists <title> into <head>. */}
-      <title>{t.home.pageTitle(content.studio_name)}</title>
+      <PageHead title={t.home.pageTitle(content.studio_name)} description={content.hero_text} />
       <Hero content={content} slides={slides} items={items} formatPrice={formatPrice} />
       <CollectionGrid
         eyebrow={content.collection_eyebrow}

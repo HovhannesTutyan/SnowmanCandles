@@ -1,0 +1,31 @@
+{# Head tags for one page. data-ssr marks them so the React app can take over after the first click. #}
+    <title data-ssr>{{ page.title }}</title>
+{% if page.description %}    <meta data-ssr name="description" content="{{ page.description }}" />
+{% endif %}{% if page.noindex %}    <meta data-ssr name="robots" content="noindex, follow" />
+{% endif %}{% if page.canonical %}    <link data-ssr rel="canonical" href="{{ page.canonical }}" />
+{% endif %}{% for hreflang, url in page.alternates %}    <link data-ssr rel="alternate" hreflang="{{ hreflang }}" href="{{ url }}" />
+{% endfor %}    <meta data-ssr property="og:site_name" content="{{ page.body.studio }}" />
+    <meta data-ssr property="og:type" content="{{ page.og_type }}" />
+    <meta data-ssr property="og:title" content="{{ page.title }}" />
+{% if page.description %}    <meta data-ssr property="og:description" content="{{ page.description }}" />
+{% endif %}{% if page.canonical %}    <meta data-ssr property="og:url" content="{{ page.canonical }}" />
+{% endif %}    <meta data-ssr property="og:locale" content="{{ page.og_locale }}" />
+{% for locale in page.og_locale_alternates %}    <meta data-ssr property="og:locale:alternate" content="{{ locale }}" />
+{% endfor %}{% if page.image %}    <meta data-ssr property="og:image" content="{{ page.image }}" />
+    <meta data-ssr property="og:image:alt" content="{{ page.image_alt }}" />
+{% endif %}{% if page.product_meta %}    <meta data-ssr property="product:price:amount" content="{{ page.product_meta.price }}" />
+    <meta data-ssr property="product:price:currency" content="{{ page.product_meta.currency }}" />
+    <meta data-ssr property="product:availability" content="{{ page.product_meta.availability }}" />
+{% endif %}    <meta data-ssr name="twitter:card" content="{% if page.image %}summary_large_image{% else %}summary{% endif %}" />
+{% if json_ld %}    <script data-ssr type="application/ld+json">{{ json_ld }}</script>
+{% endif %}    <style data-ssr>
+      .ssr { max-width: 1120px; margin: 0 auto; padding: 24px; color: #183a2c; line-height: 1.55; font-family: Figtree, 'Shop Armenian', Onest, system-ui, sans-serif; }
+      .ssr a { color: inherit; }
+      .ssr header, .ssr footer { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; }
+      .ssr header nav { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+      .ssr h1 { font-size: 2.2rem; line-height: 1.15; }
+      .ssr img { max-width: 100%; height: auto; }
+      .ssr .ssr-hero img { max-width: 360px; }
+      .ssr .ssr-gallery, .ssr .ssr-products { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0; list-style: none; }
+      .ssr .ssr-products img, .ssr .ssr-gallery img { display: block; width: 160px; height: 160px; object-fit: contain; }
+    </style>

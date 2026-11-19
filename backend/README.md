@@ -1,4 +1,4 @@
-# Candle Shop — Django backend
+# HugCrafts — Django backend
 
 Django 5.2 + Django REST Framework backend for the candle shop. It provides:
 
@@ -55,6 +55,10 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 | `ALLOWED_HOSTS`        | `localhost,127.0.0.1`                       | Comma-separated.                        |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:5173`                     | Comma-separated; the React dev server.  |
 | `DATABASE_URL`         | `postgres://user:pass@localhost:5432/shop`  | Optional. Defaults to SQLite.           |
+| `SITE_URL`             | `https://hugcrafts.am`                      | Recommended in production. The public address used in the links search engines see. |
+| `BEHIND_PROXY`         | `True`                                      | Behind Apache/nginx/a tunnel: trust its https header. |
+| `SECURE_SSL_REDIRECT`  | `True`                                      | Send http:// to https://. Needs `BEHIND_PROXY` (see [deploy/SERVER.md](../deploy/SERVER.md)). |
+| `SECURE_HSTS_SECONDS`  | `31536000`                                  | Optional. Browsers always use https. Only once https works everywhere. |
 | `TRANSLATION_PROVIDER` | `claude` or `google`                        | Optional. Turns on the admin's **Translate** button (see [Languages](#languages-english-armenian-russian)). |
 | `TRANSLATION_API_KEY`  | *(API key)*                                 | Optional. The provider's key. Never commit it. |
 | `TRANSLATION_MODEL`    | `claude-opus-5-5`                           | Optional, Claude only.                  |
@@ -160,7 +164,7 @@ Product images also look best as cut-outs with a transparent background.
 
 ```json
 {
-  "studio_name": "Celeb Candles",
+  "studio_name": "HugCrafts",
   "accent_color": "#B4451A",
   "currency": "USD",
   "ticker_messages": ["Winter collection is here", "..."],
@@ -294,6 +298,33 @@ or the list actions (*confirmed*, *out for delivery*, *delivered*).
 - The basket texts ("Free delivery in 1–2 days", the thank-you message) are under
   **Home → Site content → Basket & checkout**.
 - Spam protection: a hidden form field, and at most 20 orders per visitor per hour.
+
+## Search engines (SEO → Search engine settings)
+
+Every page is sent from the server with its own title, description, links to the other
+language versions, preview tags for shared links (Telegram, WhatsApp, Facebook…),
+structured data for Google (products with price, stock and free delivery; FAQs; breadcrumbs)
+and the page's text as plain HTML. Search engines and link previews read this without
+running JavaScript; in the browser the React app replaces it as soon as it starts.
+
+- **SEO → Search engine settings:** the search title and description of the home, candle
+  care, ingredients and decorate pages, the preview image for shared links, and the delivery
+  country and days shown to Google.
+- **Each product → Search engines (SEO):** the product's own search title and description.
+- Every box can stay empty: the grey text in it is what's used automatically (in that
+  language). An empty Armenian or Russian box gets the automatic text in that language,
+  never the English one.
+- The basket and checkout are kept out of search results, and addresses that don't exist
+  answer with a real "404 Not Found".
+- `/robots.txt` lets search engines read everything except the admin and points to
+  `/sitemap.xml`, which lists every page and product in all three languages (with the
+  product photos, for Google Images).
+- Product photos have the product name as their description (alt text).
+- Uploaded photos and videos are cached by browsers for 30 days, the built JavaScript/CSS
+  for a year.
+- **Production:** see [deploy/SERVER.md](../deploy/SERVER.md): `SITE_URL`, the http → https
+  and www redirects, and an Apache config that sends page addresses to Django (if Apache
+  sends `index.html` itself, search engines get an empty page).
 
 ## Languages (English, Armenian, Russian)
 

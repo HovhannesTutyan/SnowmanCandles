@@ -2,6 +2,7 @@ import cartStyles from '../components/cart/Cart.module.css'
 import { CartLineItem } from '../components/cart/CartLineItem'
 import { CartTotals } from '../components/cart/CartTotals'
 import { ArrowRightIcon } from '../components/icons'
+import { PageHead } from '../components/layout/PageHead'
 import { useCart } from '../context/cart'
 import { useSite } from '../context/site'
 import { useCartDetails } from '../hooks/useCartDetails'
@@ -19,7 +20,7 @@ export function BasketPage() {
 
   return (
     <div className={styles.page}>
-      <title>{`${t.basket.pageTitle} — ${content.studio_name}`}</title>
+      <PageHead title={`${t.basket.pageTitle} — ${content.studio_name}`} />
       <div className={styles.inner}>
         <header className={styles.head}>
           <h1 className={styles.title}>{t.basket.title}</h1>
