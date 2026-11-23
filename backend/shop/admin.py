@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.html import format_html
 
 from languages.admin import TranslatedAdmin, TranslatedStackedInline
+from seo.admin import ProductSeoMixin
 
 from .models import (
     LOW_STOCK_THRESHOLD,
@@ -125,7 +126,7 @@ class AvailabilityFilter(admin.SimpleListFilter):
         return queryset
 
 
-class BaseItemAdmin(TranslatedAdmin):
+class BaseItemAdmin(ProductSeoMixin, TranslatedAdmin):
     list_display = [
         "thumbnail", "title", "price", "stock", "availability", "translation_status",
         "is_featured", "featured_order",
@@ -230,6 +231,7 @@ class CandleAdmin(BaseItemAdmin):
         ("Homepage", {"fields": ["is_featured", "featured_order"]}),
         PRODUCT_PAGE_FIELDSET,
         LIT_VIEW_FIELDSET,
+        ProductSeoMixin.seo_fieldset,
         ("Timestamps", {"fields": ["created_at", "updated_at"], "classes": ["collapse"]}),
     ]
     filter_horizontal = ["scents"]
@@ -252,6 +254,7 @@ class CollectionAdmin(BaseItemAdmin):
         ("Candles in this collection", {"fields": ["candles"]}),
         PRODUCT_PAGE_FIELDSET,
         LIT_VIEW_FIELDSET,
+        ProductSeoMixin.seo_fieldset,
         ("Timestamps", {"fields": ["created_at", "updated_at"], "classes": ["collapse"]}),
     ]
 

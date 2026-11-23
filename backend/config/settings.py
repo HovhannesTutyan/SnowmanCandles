@@ -1,5 +1,5 @@
 """
-Django settings for the Candle Shop backend.
+Django settings for the HugCrafts backend.
 
 All environment-specific values are read from environment variables
 (or a local `.env` file). See `.env.example` for the available keys.
@@ -18,6 +18,9 @@ env = environ.Env(
     CSRF_TRUSTED_ORIGINS=(list, []),
     BEHIND_PROXY=(bool, False),
     SERVE_MEDIA=(bool, False),
+    SITE_URL=(str, ""),
+    SECURE_SSL_REDIRECT=(bool, False),
+    SECURE_HSTS_SECONDS=(int, 0),
     TRANSLATION_PROVIDER=(str, ""),
     TRANSLATION_API_KEY=(str, ""),
     TRANSLATION_MODEL=(str, ""),
@@ -52,9 +55,12 @@ INSTALLED_APPS = [
     "ingredients",
     "decorate",
     "orders",
+    "seo",
 ]
 
 MIDDLEWARE = [
+    # www.hugcrafts.am -> hugcrafts.am (only when SITE_URL is set).
+    "config.middleware.CanonicalHostMiddleware",
     "django.middleware.security.SecurityMiddleware",
     # Serves static files and the built React app when DEBUG is off.
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -158,6 +164,8 @@ if FRONTEND_DIST.is_dir():
     WHITENOISE_ROOT = FRONTEND_DIST
 # Vite puts a content hash in every file under /assets/, so they can be cached forever.
 WHITENOISE_IMMUTABLE_FILE_TEST = r"^/assets/"
+# Other files of the build (favicon…) can be kept by browsers for a day.
+WHITENOISE_MAX_AGE = 60 * 60 * 24
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -197,3 +205,20 @@ if env("BEHIND_PROXY"):
 # Serve uploaded images from Django itself when DEBUG is off (fine for a small shop on
 # one machine; a bigger setup would use a web server or cloud storage instead).
 SERVE_MEDIA = env("SERVE_MEDIA")
+
+# The public address, e.g. https://hugcrafts.am. Used in the links search engines see
+# (canonical address, language versions, preview images, sitemap). Empty: taken from each
+# request (fine for local development).
+SITE_URL = env("SITE_URL").rstrip("/")
+if SITE_URL:
+    # Every image address (API, admin, pages) uses the public https address, whatever the
+    # web server in front forwards to Django.
+    MEDIA_URL = f"{SITE_URL}/media/"
+
+# Send http:// visitors to https://. Only turn on with BEHIND_PROXY=True and a web server
+# that sets "X-Forwarded-Proto: https" on the requests it forwards, or pages keep
+# redirecting to themselves.
+SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT")
+# Tells browsers to always use https for this site (e.g. 31536000 = a year). Leave at 0
+# until https works everywhere: browsers remember it.
+SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS")

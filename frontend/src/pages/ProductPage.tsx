@@ -2,6 +2,7 @@ import { useParams } from 'react-router'
 
 import { fetchProduct, isNotFound } from '../api/client'
 import type { ProductDetail, ProductKind } from '../api/types'
+import { PageHead } from '../components/layout/PageHead'
 import { BuyBox } from '../components/product/BuyBox'
 import { MakingOf } from '../components/product/MakingOf'
 import { ProductGallery } from '../components/product/ProductGallery'
@@ -52,8 +53,7 @@ function ProductView({ product }: { product: ProductDetail }) {
 
   return (
     <>
-      <title>{`${product.title} — ${content.studio_name}`}</title>
-      <meta name="description" content={product.description} />
+      <PageHead title={`${product.title} — ${content.studio_name}`} description={product.description} />
 
       <section className={styles.product}>
         <nav aria-label={t.product.breadcrumb} className={`${styles.breadcrumb} ${styles.rise}`}>

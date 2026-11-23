@@ -1,4 +1,4 @@
-# Candle Shop — React frontend
+# HugCrafts — React frontend
 
 The shop's storefront, built with Vite, React 19, React Router and TypeScript from the
 "Home page" and "Product page" design mockups. All content comes from the Django backend

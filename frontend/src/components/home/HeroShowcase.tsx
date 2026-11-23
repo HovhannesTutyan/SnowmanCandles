@@ -90,7 +90,7 @@ export function HeroShowcase({ slides, formatPrice, fallbackImage }: HeroShowcas
                     tabIndex={-1}
                     aria-hidden="true"
                   >
-                    <img src={slide.image} alt="" />
+                    <img src={slide.image} alt={slide.title} />
                   </Link>
                 ) : (
                   <div className={`${styles.piece} bob`}>

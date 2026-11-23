@@ -7,6 +7,7 @@ import { ArrowRightIcon } from '../components/icons'
 import { ChapterSection } from '../components/ingredients/ChapterSection'
 import { Grain } from '../components/ingredients/Illustrations'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
+import { PageHead } from '../components/layout/PageHead'
 import { useSite } from '../context/site'
 import { useI18n } from '../i18n/context'
 import { Link } from '../i18n/Link'
@@ -33,8 +34,7 @@ function IngredientsView({ page }: { page: IngredientsPageData }) {
 
   return (
     <div id="top" className={styles.page}>
-      <title>{`${page.hero_title} — ${content.studio_name}`}</title>
-      <meta name="description" content={t.ingredients.description} />
+      <PageHead title={`${page.hero_title} — ${content.studio_name}`} description={t.ingredients.description} />
       {/* Dark top that fades into the cream page, as in the design. */}
       <div className={styles.backdrop} aria-hidden="true" />
 
@@ -59,7 +59,7 @@ function IngredientsView({ page }: { page: IngredientsPageData }) {
 
           <div className={styles.heroPicture}>
             {page.hero_image ? (
-              <img className={styles.heroPhoto} src={page.hero_image} alt="" />
+              <img className={styles.heroPhoto} src={page.hero_image} alt={page.hero_title} />
             ) : (
               <div
                 className={styles.linen}

@@ -5,6 +5,7 @@ import { Faq } from '../components/care/Faq'
 import { CandlelitScene, ShelfScene } from '../components/care/Scenes'
 import { SectionNav } from '../components/common/SectionNav'
 import { ErrorScreen, LoadingScreen } from '../components/StatusScreen'
+import { PageHead } from '../components/layout/PageHead'
 import { useSite } from '../context/site'
 import { useI18n } from '../i18n/context'
 import { Link } from '../i18n/Link'
@@ -37,8 +38,7 @@ function CareTipsView({ page }: { page: CarePageData }) {
 
   return (
     <div id="top" className={styles.page}>
-      <title>{`${t.care.pageTitle} — ${content.studio_name}`}</title>
-      <meta name="description" content={t.care.description} />
+      <PageHead title={`${t.care.pageTitle} — ${content.studio_name}`} description={t.care.description} />
       {/* Dark top that fades into the cream page, as in the design. */}
       <div className={styles.backdrop} aria-hidden="true" />
 

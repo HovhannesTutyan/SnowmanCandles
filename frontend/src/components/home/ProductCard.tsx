@@ -30,7 +30,7 @@ export function ProductCard({ item, formatPrice }: ProductCardProps) {
         <img
           className={`${styles.image} pimg`}
           src={item.image}
-          alt=""
+          alt={item.title}
           loading="lazy"
           decoding="async"
         />

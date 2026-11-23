@@ -1,5 +1,6 @@
 
 import { MessageScreen } from '../components/StatusScreen'
+import { PageHead } from '../components/layout/PageHead'
 import { useI18n } from '../i18n/context'
 import { Link } from '../i18n/Link'
 import styles from './NotFoundPage.module.css'
@@ -14,7 +15,7 @@ export function NotFoundPage({ title, message }: NotFoundPageProps) {
   const heading = title ?? t.status.notFoundTitle
   return (
     <>
-      <title>{heading}</title>
+      <PageHead title={heading} />
       <MessageScreen
         title={heading}
         action={

@@ -94,7 +94,7 @@ class HomePageContent(models.Model):
     There is only ever one row."""
 
     # Brand & contact
-    studio_name = models.CharField(max_length=80, default="Celeb Candles")
+    studio_name = models.CharField(max_length=80, default="HugCrafts")
     accent_color = models.CharField(
         max_length=7,
         default="#B4451A",
@@ -216,7 +216,7 @@ class HomePageContent(models.Model):
     contact_email = models.EmailField(blank=True)
     contact_phone = models.CharField(max_length=40, blank=True)
     instagram_handle = models.CharField(
-        max_length=60, blank=True, help_text="Without the @, e.g. celebcandles"
+        max_length=60, blank=True, help_text="Without the @, e.g. hugcrafts"
     )
 
     # Product pages (shared by every product)

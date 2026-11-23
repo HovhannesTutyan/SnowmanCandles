@@ -4,6 +4,7 @@ import { ApiError, outOfStockProblems, placeOrder } from '../api/client'
 import type { PlacedOrder } from '../api/types'
 import cartStyles from '../components/cart/Cart.module.css'
 import { CartTotals } from '../components/cart/CartTotals'
+import { PageHead } from '../components/layout/PageHead'
 import { useCart } from '../context/cart'
 import { useSite } from '../context/site'
 import { useCartDetails } from '../hooks/useCartDetails'
@@ -61,7 +62,7 @@ export function CheckoutPage() {
   const [honeypot, setHoneypot] = useState('')
   const formId = useId()
 
-  const title = <title>{`${t.checkout.pageTitle} — ${content.studio_name}`}</title>
+  const title = <PageHead title={`${t.checkout.pageTitle} — ${content.studio_name}`} />
 
   if (placed) {
     return (

@@ -1,0 +1,88 @@
+{# The page's text as plain HTML, inside <div id="root">. React replaces it when it starts. #}
+{% with b=page.body %}<div class="ssr">
+  <header>
+    <a href="{{ b.home_url }}"><strong>{{ b.studio }}</strong></a>
+    <nav aria-label="{{ b.nav_label }}">{% for label, url in b.nav %}<a href="{{ url }}">{{ label }}</a>{% endfor %}</nav>
+    <nav aria-label="{{ b.language_label }}">{% for name, url, lang, current in b.languages %}<a href="{{ url }}" hreflang="{{ lang }}" lang="{{ lang }}"{% if current %} aria-current="page"{% endif %}>{{ name }}</a>{% endfor %}</nav>
+  </header>
+  <main>
+{% if page.kind == "home" %}
+    <section class="ssr-hero">
+      {% if b.eyebrow %}<p>{{ b.eyebrow }}</p>{% endif %}
+      <h1>{{ b.heading }}</h1>
+      <p>{{ b.intro }}</p>
+      {% if b.delivery_text %}<p>{{ b.delivery_text }}</p>{% endif %}
+    </section>
+    <section id="shop">
+      <h2>{{ b.collection_title }}</h2>
+      <ul class="ssr-products">{% for p in b.products %}{% include "seo/card.html" %}{% endfor %}</ul>
+    </section>
+    <section>
+      <h2>{{ b.made_title }}</h2>
+      <p>{{ b.made_text }}</p>
+      <ol>{% for title, text in b.steps %}<li><strong>{{ title }}</strong> — {{ text }}</li>{% endfor %}</ol>
+    </section>
+    {% if b.story_title %}<section><h2>{{ b.story_title }}</h2>{% for p in b.story_text %}<p>{{ p }}</p>{% endfor %}</section>{% endif %}
+    <section><h2>{{ b.custom_title }}</h2><p>{{ b.custom_text }}</p></section>
+{% elif page.kind == "product" %}
+    <nav aria-label="{{ b.breadcrumb_label }}"><a href="{{ b.home_url }}">{{ b.home_label }}</a> › <span aria-current="page">{{ b.heading }}</span></nav>
+    <article>
+      <div class="ssr-hero">{% if b.image %}<img src="{{ b.image }}" alt="{{ b.heading }}" />{% endif %}</div>
+      <p>{{ b.type }}</p>
+      <h1>{{ b.heading }}</h1>
+      <p><strong>{{ b.price }}</strong> · {{ b.availability }}</p>
+      {% if b.price_note %}<p>{{ b.price_note }}</p>{% endif %}
+      {% for p in b.description %}<p>{{ p }}</p>{% endfor %}
+      <dl>{% for label, value in b.facts %}{% if value %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% endif %}{% endfor %}</dl>
+      {% if b.scents %}<h2>{{ b.scents_label }}</h2><ul>{% for name in b.scents %}<li>{{ name }}</li>{% endfor %}</ul>{% endif %}
+      {% if b.includes %}<h2>{{ b.includes_label }}</h2><ul class="ssr-products">{% for p in b.includes %}{% include "seo/card.html" %}{% endfor %}</ul>{% endif %}
+      {% if b.details %}<h2>{{ b.details_label }}</h2>{% for p in b.details %}<p>{{ p }}</p>{% endfor %}{% endif %}
+      {% if b.gallery %}<ul class="ssr-gallery">{% for src, alt in b.gallery %}<li><img src="{{ src }}" alt="{{ alt }}" loading="lazy" /></li>{% endfor %}</ul>{% endif %}
+      {% if b.story_title %}<h2>{{ b.story_title }}</h2>{% endif %}{% for p in b.story_text %}<p>{{ p }}</p>{% endfor %}
+      {% if b.care_text %}<h2>{{ b.care_label }}</h2><p>{{ b.care_text }}</p>{% endif %}
+      {% if b.shipping_text %}<h2>{{ b.shipping_label }}</h2><p>{{ b.shipping_text }}</p>{% endif %}
+    </article>
+    {% if b.related %}<section><h2>{{ b.related_label }}</h2><ul class="ssr-products">{% for p in b.related %}{% include "seo/card.html" %}{% endfor %}</ul></section>{% endif %}
+{% elif page.kind == "care" %}
+    <h1>{{ b.heading }}</h1>
+    <p>{{ b.intro }}</p>
+    {% if b.tips %}<section><h2>{{ b.tips_title }}</h2><ol>{% for title, text in b.tips %}<li><h3>{{ title }}</h3><p>{{ text }}</p></li>{% endfor %}</ol></section>{% endif %}
+    {% if b.rituals %}<section><h2>{{ b.rituals_title }}</h2>{% for title, text in b.rituals %}<h3>{{ title }}</h3><p>{{ text }}</p>{% endfor %}</section>{% endif %}
+    <section><h2>{{ b.fragrance_title }}</h2>{% for p in b.fragrance_text %}<p>{{ p }}</p>{% endfor %}
+      {% if b.fragrance_tips %}<ul>{% for lead, text in b.fragrance_tips %}<li><strong>{{ lead }}</strong> {{ text }}</li>{% endfor %}</ul>{% endif %}</section>
+    {% if b.faqs %}<section><h2>{{ b.faq_title }}</h2>{% for q, a in b.faqs %}<h3>{{ q }}</h3><p>{{ a }}</p>{% endfor %}</section>{% endif %}
+{% elif page.kind == "ingredients" %}
+    <h1>{{ b.heading }}</h1>
+    <p>{{ b.intro }}</p>
+    {% for ch in b.chapters %}<section id="{{ ch.anchor }}">
+      <h2>{{ ch.title }}</h2>
+      <p>{{ ch.intro }}</p>
+      {% for p in ch.paragraphs %}<p>{{ p }}</p>{% endfor %}
+      {% if ch.points %}<ul>{% for lead, text in ch.points %}<li><strong>{{ lead }}</strong> {{ text }}</li>{% endfor %}</ul>{% endif %}
+      {% for q, a in ch.questions %}<h3>{{ q }}</h3><p>{{ a }}</p>{% endfor %}
+      {% if ch.cards %}{% if ch.cards_title %}<h3>{{ ch.cards_title }}</h3>{% endif %}<ul>{% for title, text in ch.cards %}<li><strong>{{ title }}</strong> — {{ text }}</li>{% endfor %}</ul>{% endif %}
+      {% if ch.swatches %}<p>{{ ch.swatches|join:", " }}</p>{% endif %}
+    </section>{% endfor %}
+    {% if b.cta_title %}<section><h2>{{ b.cta_title }}</h2><p>{{ b.cta_text }}</p></section>{% endif %}
+{% elif page.kind == "decorate" %}
+    {% if b.eyebrow %}<p>{{ b.eyebrow }}</p>{% endif %}
+    <h1>{{ b.heading }}</h1>
+    <p>{{ b.intro }}</p>
+    <section><h2>{{ b.story_title }}</h2>{% if b.story_subtitle %}<p>{{ b.story_subtitle }}</p>{% endif %}{% for p in b.story_text %}<p>{{ p }}</p>{% endfor %}
+      {% if b.rooms %}<ul>{% for title, text in b.rooms %}<li><h3>{{ title }}</h3><p>{{ text }}</p></li>{% endfor %}</ul>{% endif %}</section>
+    {% if b.gallery %}<section><h2>{{ b.gallery_title }}</h2>{% if b.gallery_text %}<p>{{ b.gallery_text }}</p>{% endif %}
+      <ul class="ssr-gallery">{% for src, alt, caption in b.gallery %}<li><figure><img src="{{ src }}" alt="{{ alt }}" loading="lazy" /><figcaption>{{ caption }}</figcaption></figure></li>{% endfor %}</ul></section>{% endif %}
+    {% if b.cta_title %}<section><h2>{{ b.cta_title }}</h2><p>{{ b.cta_text }}</p></section>{% endif %}
+{% else %}
+    <h1>{{ b.heading }}</h1>
+    {% if b.intro %}<p>{{ b.intro }}</p>{% endif %}
+    {% if b.link %}<p><a href="{{ b.link.1 }}">{{ b.link.0 }}</a></p>{% endif %}
+{% endif %}
+  </main>
+  <footer>
+    {% if b.footer_text %}<p>{{ b.footer_text }}</p>{% endif %}
+    {% if b.contact_email %}<a href="mailto:{{ b.contact_email }}">{{ b.contact_email }}</a>{% endif %}
+    {% if b.contact_phone %}<a href="tel:{{ b.contact_phone|cut:' ' }}">{{ b.contact_phone }}</a>{% endif %}
+    {% if b.instagram %}<a href="https://www.instagram.com/{{ b.instagram }}/" rel="me">@{{ b.instagram }}</a>{% endif %}
+  </footer>
+</div>{% endwith %}

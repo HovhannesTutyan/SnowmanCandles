@@ -1,28 +1,31 @@
 import re
 from pathlib import Path
 
-from django.conf import settings
-from django.http import FileResponse, Http404, HttpResponse, StreamingHttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.utils._os import safe_join
 from django.views.decorators.cache import never_cache
 from django.views.static import serve
+
+from seo.render import render_page
 
 
 @never_cache
 def spa_index(request, path=""):
     """The built React app's index.html, for every page URL (/candles/…, /decorate, …).
 
-    React Router picks the page in the browser. Files under /assets/ are served by
+    Each page gets its own title, description, language links, link-preview tags,
+    structured data and text (see seo/), so search engines and link previews see the real
+    page. React Router then takes over in the browser. Files under /assets/ are served by
     WhiteNoise before this view is reached.
     """
-    index = settings.FRONTEND_DIST / "index.html"
-    if not index.is_file():
-        raise Http404("The frontend hasn't been built yet (run `npm run build` in frontend/).")
-    return FileResponse(index.open("rb"), content_type="text/html; charset=utf-8")
+    return render_page(request)
 
 
 _RANGE = re.compile(r"^bytes=(\d*)-(\d*)$")
 _CHUNK = 64 * 1024
+# Browsers keep uploaded photos and videos for 30 days. A new upload always gets a new file
+# name (Django adds a suffix when the name is taken), so changes still show straight away.
+MEDIA_CACHE_CONTROL = "public, max-age=2592000"
 
 
 def serve_media(request, path, document_root):
@@ -33,6 +36,8 @@ def serve_media(request, path, document_root):
     """
     response = serve(request, path, document_root=document_root)
     response["Accept-Ranges"] = "bytes"
+    if response.status_code in (200, 304):
+        response["Cache-Control"] = MEDIA_CACHE_CONTROL
     match = _RANGE.match(request.headers.get("Range", "").strip())
     if response.status_code != 200 or not match:
         return response
@@ -65,4 +70,5 @@ def serve_media(request, path, document_root):
     partial["Content-Length"] = str(end - start + 1)
     partial["Content-Range"] = f"bytes {start}-{end}/{size}"
     partial["Accept-Ranges"] = "bytes"
+    partial["Cache-Control"] = MEDIA_CACHE_CONTROL
     return partial

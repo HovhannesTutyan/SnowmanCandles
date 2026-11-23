@@ -1,3 +1,5 @@
+from urllib.parse import urlsplit
+
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -5,14 +7,17 @@ from django.urls import include, path, re_path
 from care.views import CarePageView
 from decorate.views import DecoratePageView
 from ingredients.views import IngredientsPageView
+from seo.views import robots_txt, sitemap_xml
 
 from .views import serve_media, spa_index
 
-admin.site.site_header = "Candle Shop Admin"
-admin.site.site_title = "Candle Shop Admin"
+admin.site.site_header = "HugCrafts Admin"
+admin.site.site_title = "HugCrafts Admin"
 admin.site.index_title = "Manage candles & collections"
 
 urlpatterns = [
+    path("robots.txt", robots_txt, name="robots"),
+    path("sitemap.xml", sitemap_xml, name="sitemap"),
     path("admin/languages/", include("languages.urls")),
     path("admin/", admin.site.urls),
     path("api/", include("home.urls")),
@@ -25,7 +30,8 @@ urlpatterns = [
 
 # Uploaded files (with byte ranges, so videos play on iPhones too).
 if settings.DEBUG or settings.SERVE_MEDIA:
-    media_prefix = settings.MEDIA_URL.strip("/")
+    # MEDIA_URL can be a full address (see SITE_URL); only its path matters here.
+    media_prefix = urlsplit(settings.MEDIA_URL).path.strip("/")
     urlpatterns += [
         re_path(
             rf"^{media_prefix}/(?P<path>.*)$", serve_media, {"document_root": settings.MEDIA_ROOT}
